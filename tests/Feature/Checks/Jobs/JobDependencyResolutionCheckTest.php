@@ -17,17 +17,23 @@ class JobDependencyResolutionCheckTest extends TestCase
         $result = (new JobDependencyResolutionCheck())->run();
 
         $this->assertCheckFailed($result, Severity::Warning);
+        $this->assertStringContainsString('ClosureTypedJob', $result->locations[0]['job'] ?? '');
     }
 
     /** @test */
-    public function it_passes_for_serializable_constructor_parameters(): void
+    public function it_does_not_flag_serializable_constructor_parameters(): void
     {
-        if (class_exists(\SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\SerializableTypedJob::class)) {
-            $result = (new JobDependencyResolutionCheck())->run();
-            // Might still include the broken job; just verify the check runs
-            $this->assertIsObject($result);
-        } else {
-            $this->assertTrue(true);
-        }
+        // Load both jobs - ClosureTypedJob should be flagged, SerializableTypedJob should not
+        require_once __DIR__.'/../../../Fixtures/App/Jobs/ClosureTypedJob.php';
+        require_once __DIR__.'/../../../Fixtures/App/Jobs/SerializableTypedJob.php';
+
+        $result = (new JobDependencyResolutionCheck())->run();
+
+        $this->assertCheckFailed($result, Severity::Warning);
+
+        // Only ClosureTypedJob should be in locations; SerializableTypedJob must not appear
+        $flaggedJobs = array_column($result->locations, 'job');
+        $this->assertContains('SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\ClosureTypedJob', $flaggedJobs);
+        $this->assertNotContains('SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\SerializableTypedJob', $flaggedJobs);
     }
 }

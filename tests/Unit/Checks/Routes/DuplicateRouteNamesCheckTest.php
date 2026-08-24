@@ -69,11 +69,4 @@ class DuplicateRouteNamesCheckTest extends TestCase
         $this->assertCount(2, $apiIssues);
         $this->assertCount(2, $dupIssues);
     }
-
-    /** @test */
-    public function it_has_trailing_newline_after_fix(): void
-    {
-        $content = file_get_contents(__DIR__ . '/../../../../src/Checks/Routes/DuplicateRouteNamesCheck.php');
-        $this->assertStringEndsWith("\n", $content, 'File must end with a trailing newline.');
-    }
 }

@@ -10,17 +10,11 @@ use Illuminate\Support\Facades\Route;
 class DuplicateUrisCheckTest extends TestCase
 {
     /** @test */
-    public function it_detects_duplicate_uris_with_same_method(): void
+    public function it_passes_when_no_duplicate_uris_registered(): void
     {
-        // Laravel's RouteCollection deduplicates identical URI+method routes
-        // internally, so registering two gets to same URI only registers one.
-        // We test by using Route facade and checking the routes array.
-        // The check itself iterates RouteCollection — if there are no actual
-        // dupes, it passes. This is correct behavior for this level.
         Route::get('/unique-get', fn () => '')->name('unique.get');
-        Route::post('/unique-get', fn () => '')->name('unique.post');
+        Route::post('/unique-get', fn () => '')->name('unique.post'); // Different method = not duplicate
 
-        // Since no real duplicate: this passes.
         $result = (new DuplicateUrisCheck())->run();
 
         $this->assertCheckPassed($result);

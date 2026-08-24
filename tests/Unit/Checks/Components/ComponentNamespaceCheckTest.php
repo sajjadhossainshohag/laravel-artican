@@ -16,4 +16,17 @@ class ComponentNamespaceCheckTest extends TestCase
         // Default testbench namespace hints exist — should pass
         $this->assertCheckPassed($result);
     }
+
+    /** @test */
+    public function it_fails_when_namespace_path_is_missing(): void
+    {
+        // Register a fake view namespace pointing to a non-existent directory
+        app('view')->addNamespace('fake.test.namespace', '/this/path/does/not/exist/67890');
+
+        $result = (new ComponentNamespaceCheck())->run();
+
+        $this->assertCheckFailed($result, Severity::Info);
+        $this->assertNotEmpty($result->locations);
+        $this->assertStringContainsString('fake.test.namespace', $result->locations[0]['namespace'] ?? '');
+    }
 }
