@@ -1,8 +1,8 @@
 <?php
 
-namespace SajjadHossain\Doctor\DTOs;
+namespace SajjadHossain\Artican\DTOs;
 
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Enums\Severity;
 
 final class CheckResult
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Views;
+namespace SajjadHossain\Artican\Checks\Views;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\BladeAstCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\BladeAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 /**
  * Validates @include('view.name') references using Laravel's
@@ -25,7 +25,7 @@ use SajjadHossain\Doctor\Enums\Severity;
  *
  * CLI / multi‑theme limitation:
  * If a provider registers a namespace hint whose directory depends on
- * run‑time request context (e.g. site_theme()), `php artisan doctor:scan`
+ * run‑time request context (e.g. site_theme()), `php artisan artican:scan`
  * has no HTTP request, so the namespace resolves to whatever the
  * *default* context produces. Validate additional themes by re‑running
  * the scan after swapping the theme context.

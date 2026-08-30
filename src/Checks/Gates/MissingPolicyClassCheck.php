@@ -1,14 +1,14 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Gates;
+namespace SajjadHossain\Artican\Checks\Gates;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class MissingPolicyClassCheck extends PhpAstCheck
 {

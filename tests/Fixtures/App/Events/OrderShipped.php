@@ -1,5 +1,5 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Events;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Events;
 
 class OrderShipped {}

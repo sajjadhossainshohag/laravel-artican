@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Isolated\HasOneWrong;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Isolated\HasOneWrong;
 
 use Illuminate\Database\Eloquent\Model;
 

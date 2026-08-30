@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mail\Isolated\TextLegacy;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mail\Isolated\TextLegacy;
 
 use Illuminate\Mail\Mailable;
 

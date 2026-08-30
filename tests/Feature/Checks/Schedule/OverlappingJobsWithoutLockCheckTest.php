@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Schedule;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Schedule;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Schedule\OverlappingJobsWithoutLockCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Schedule\OverlappingJobsWithoutLockCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class OverlappingJobsWithoutLockCheckTest extends TestCase
 {

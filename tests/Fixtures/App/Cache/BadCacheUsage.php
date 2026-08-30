@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Cache;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Cache;
 
 use Illuminate\Support\Facades\Cache;
 

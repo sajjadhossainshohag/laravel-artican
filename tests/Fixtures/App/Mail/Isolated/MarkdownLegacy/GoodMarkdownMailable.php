@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mail\Isolated\MarkdownLegacy;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mail\Isolated\MarkdownLegacy;
 
 use Illuminate\Mail\Mailable;
 

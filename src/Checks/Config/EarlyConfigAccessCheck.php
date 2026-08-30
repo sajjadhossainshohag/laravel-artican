@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Config;
+namespace SajjadHossain\Artican\Checks\Config;
 
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class EarlyConfigAccessCheck implements HealthCheck
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Schedule;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Schedule;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Schedule\DeletedScheduledCommandCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Schedule\DeletedScheduledCommandCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class DeletedScheduledCommandCheckTest extends TestCase
 {

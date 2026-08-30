@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor;
+namespace SajjadHossain\Artican;
 
 abstract class BladeAstCheck extends PhpAstCheck
 {

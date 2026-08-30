@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mixed\WireModel;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mixed\WireModel;
 
 class MixedWireModelComponent
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Views;
+namespace SajjadHossain\Artican\Checks\Views;
 
-use SajjadHossain\Doctor\BladeAstCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\BladeAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 /**
  * Validates @extends('layout.name') references using Laravel's
@@ -20,7 +20,7 @@ use SajjadHossain\Doctor\Enums\Severity;
  *
  * CLI / multi‑theme limitation:
  * If a provider registers a namespace hint whose directory depends on
- * run‑time request context (e.g. site_theme()), `php artisan doctor:scan`
+ * run‑time request context (e.g. site_theme()), `php artisan artican:scan`
  * has no HTTP request, so the namespace resolves to whatever the
  * *default* context produces. Validate additional themes by re‑running
  * the scan after swapping the theme context.
@@ -90,7 +90,7 @@ class MissingExtendsCheck extends BladeAstCheck
     /**
      * Laravel only registers the `errors::` view namespace lazily, inside
      * Handler::renderHttpException()->(new RegisterErrorViewPaths)(), which
-     * never runs during `artisan doctor:scan`. Without this, view()->exists()
+     * never runs during `artisan artican:scan`. Without this, view()->exists()
      * always reports stock error views (errors::minimal, errors::layout, etc.)
      * as missing, even when they resolve fine at runtime.
      */

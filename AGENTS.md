@@ -1,8 +1,8 @@
-# Laravel Doctor — AGENTS.md
+# Laravel Artican — AGENTS.md
 
 ## Identity
 
-- **Composer library** (`sajjadhossainshohag/laravel-doctor`), not a standalone app.
+- **Composer library** (`sajjadhossainshohag/laravel-artican`), not a standalone app.
 - Static analysis tool for Laravel codebases. Scans PHP/Blade source for 50+ issues across 18 categories.
 - PHP ^8.1, supports Laravel ^10.0|^11.0|^12.0|^13.0.
 
@@ -14,41 +14,41 @@
 | `vendor/bin/phpunit --testsuite=Unit` | Unit tests only |
 | `vendor/bin/phpunit --testsuite=Feature` | Feature tests only |
 | `vendor/bin/phpunit --filter="test_method_name"` | Single test |
-| `php artisan doctor:scan` | Run health scan in a Laravel project |
-| `php artisan doctor:scan --only=routes,views` | Filter by category |
-| `php artisan doctor:scan --json` | JSON output (full metadata) |
-| `php artisan doctor:scan --format=agent` | Minimal JSON for AI agents (auto-detected) |
-| `php artisan doctor:scan --fail-on=error,warning` | Exit 1 if issues found |
-| `php artisan doctor:scan --no-cache` | Skip cached results |
-| `php artisan doctor:scan --parallel` | Run checks in parallel subprocesses |
-| `php artisan doctor:scan --parallel --workers=8` | Parallel with custom worker count |
-| `php artisan doctor:cache:clear` | Clear cached scan results |
-| `php artisan vendor:publish --tag=doctor-config` | Publish config to Laravel project |
-| `php artisan doctor:worker --only=... --output=...` | (Internal) Run a subset of checks for parallel workers |
+| `php artisan artican:scan` | Run health scan in a Laravel project |
+| `php artisan artican:scan --only=routes,views` | Filter by category |
+| `php artisan artican:scan --json` | JSON output (full metadata) |
+| `php artisan artican:scan --format=agent` | Minimal JSON for AI agents (auto-detected) |
+| `php artisan artican:scan --fail-on=error,warning` | Exit 1 if issues found |
+| `php artisan artican:scan --no-cache` | Skip cached results |
+| `php artisan artican:scan --parallel` | Run checks in parallel subprocesses |
+| `php artisan artican:scan --parallel --workers=8` | Parallel with custom worker count |
+| `php artisan artican:cache:clear` | Clear cached scan results |
+| `php artisan vendor:publish --tag=artican-config` | Publish config to Laravel project |
+| `php artisan artican:worker --only=... --output=...` | (Internal) Run a subset of checks for parallel workers |
 
 No linter, formatter, or static analysis tooling is configured.
 
 ## Architecture
 
-- **Contract:** `SajjadHossain\Doctor\Contracts\HealthCheck` — `name()`, `category()`, `severity()`, `run(): CheckResult`.
+- **Contract:** `SajjadHossain\Artican\Contracts\HealthCheck` — `name()`, `category()`, `severity()`, `run(): CheckResult`.
 - **CheckResult DTO** (`src/DTOs/CheckResult.php`): readonly properties — `check`, `category`, `severity`, `passed`, `message`, `locations`, `suggestion`.
 - **Severity enum** (`src/Enums/Severity.php`): `Error`, `Warning`, `Info` (backed: `'error'`, `'warning'`, `'info'`).
-- **Registry pattern:** `CheckRegistry` holds class strings, registered in `DoctorServiceProvider::boot()`. All 50+ checks registered there.
+- **Registry pattern:** `CheckRegistry` holds class strings, registered in `ArticanServiceProvider::boot()`. All 50+ checks registered there.
 - **AST analysis:** `PhpAstCheck` wraps `nikic/php-parser ^5.0` — provides `parse()`, `traverse()`, `scanPhpFiles()`, `resolveFqcn()`. `BladeAstCheck` extends it — compiles Blade → PHP, then parses.
 - **In-memory caches** (static, per-process): `PhpAstCheck` shares a single `Parser` instance and caches file contents (bounded to 1000 entries). `BladeAstCheck` caches compiled Blade output.
-- **Ignore patterns:** `scanPhpFiles()` applies `config('doctor.ignore.{category}')` centrally — all checks skip vendor/noisy files automatically.
-- **Persistent result cache:** `ScanResultCache` backed by Laravel Cache. Categories cached independently, invalidation via `--no-cache` or `doctor:cache:clear`.
-- **Parallel execution:** `ParallelRunner` spawns subprocesses via `proc_open` — each runs `doctor:worker --only=... --output=...` with category groups. Results serialized to temp files, merged in the parent process. Fallback to sequential on worker failure.
+- **Ignore patterns:** `scanPhpFiles()` applies `config('artican.ignore.{category}')` centrally — all checks skip vendor/noisy files automatically.
+- **Persistent result cache:** `ScanResultCache` backed by Laravel Cache. Categories cached independently, invalidation via `--no-cache` or `artican:cache:clear`.
+- **Parallel execution:** `ParallelRunner` spawns subprocesses via `proc_open` — each runs `artican:worker --only=... --output=...` with category groups. Results serialized to temp files, merged in the parent process. Fallback to sequential on worker failure.
 - **Agent detection:** `laravel/agent-detector` (optional — `suggest` in composer.json) detects OpenCode, Claude Code, Cursor, Copilot, etc. When detected (or `--format=agent` is passed), `ScanCommand` suppresses all ANSI/progress output and uses `AgentRenderer` for minimal JSON: `{"status":"pass","issues":0}`. If `laravel/agent-detector` is not installed (requires PHP 8.2+), only the explicit `--format=agent` flag triggers agent output.
-- **Allowlisted env keys:** `MissingEnvKeysCheck` reads `config('doctor.allowlisted_env_keys')` — a default list of 48 known-optional Laravel stock env vars (session, cache, database, mail, queue, etc.). Users can override via published config. Test seam: `withAllowlistedKeys()`.
-- **Entrypoints:** `DoctorServiceProvider`, `ScanCommand`, `CacheClearCommand`, `WorkerCommand` (internal). Facade alias: `Doctor`.
+- **Allowlisted env keys:** `MissingEnvKeysCheck` reads `config('artican.allowlisted_env_keys')` — a default list of 48 known-optional Laravel stock env vars (session, cache, database, mail, queue, etc.). Users can override via published config. Test seam: `withAllowlistedKeys()`.
+- **Entrypoints:** `ArticanServiceProvider`, `ScanCommand`, `CacheClearCommand`, `WorkerCommand` (internal). Facade alias: `Artican`.
 
 ## Namespace map
 
 | Namespace | Path |
 |---|---|
-| `SajjadHossain\Doctor\` | `src/` |
-| `SajjadHossain\Doctor\Tests\` | `tests/` |
+| `SajjadHossain\Artican\` | `src/` |
+| `SajjadHossain\Artican\Tests\` | `tests/` |
 
 Check implementations live under `src/Checks/{Category}/`.
 

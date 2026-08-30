@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Middleware;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Middleware;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Middleware\UnregisteredMiddlewareCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Middleware\UnregisteredMiddlewareCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class UnregisteredMiddlewareCheckTest extends TestCase
 {

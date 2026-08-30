@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Http\Requests;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

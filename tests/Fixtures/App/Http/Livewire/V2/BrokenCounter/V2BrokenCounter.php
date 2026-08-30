@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Http\Livewire\V2\BrokenCounter;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Http\Livewire\V2\BrokenCounter;
 
 /**
  * Livewire v2 component (in app/Http/Livewire/). The view has a

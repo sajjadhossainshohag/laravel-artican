@@ -1,15 +1,15 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Blade;
+namespace SajjadHossain\Artican\Checks\Blade;
 
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\BladeAstCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\BladeAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MissingNamedRoutesCheck extends BladeAstCheck
 {

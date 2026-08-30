@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Http\Livewire\V2\WireModel;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Http\Livewire\V2\WireModel;
 
 class V2WireModelComponent
 {

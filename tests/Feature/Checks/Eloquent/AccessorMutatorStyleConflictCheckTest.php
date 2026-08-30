@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Eloquent;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Eloquent;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Eloquent\AccessorMutatorStyleConflictCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Eloquent\AccessorMutatorStyleConflictCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class AccessorMutatorStyleConflictCheckTest extends TestCase
 {

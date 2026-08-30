@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Env;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Env;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Env\MissingEnvKeysCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Env\MissingEnvKeysCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MissingEnvKeyCheckTest extends TestCase
 {

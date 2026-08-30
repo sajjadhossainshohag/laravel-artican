@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Notifications;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Notifications;
 
 use Illuminate\Notifications\Notification;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Routes;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Routes;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Routes\MissingControllerMethodCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Routes\MissingControllerMethodCheck;
+use SajjadHossain\Artican\Enums\Severity;
 use Illuminate\Support\Facades\Route;
 
 class MissingControllerMethodCheckTest extends TestCase
@@ -14,7 +14,7 @@ class MissingControllerMethodCheckTest extends TestCase
     {
         // Create a real controller class so class_exists passes but method doesn't
         if (!class_exists('App\\Http\\Controllers\\TestController')) {
-            class_alias(\SajjadHossain\Doctor\Tests\Fixtures\App\Http\Controllers\EmptyController::class, 'App\\Http\\Controllers\\TestController');
+            class_alias(\SajjadHossain\Artican\Tests\Fixtures\App\Http\Controllers\EmptyController::class, 'App\\Http\\Controllers\\TestController');
         }
 
         Route::get('/missing-method', 'App\\Http\\Controllers\\TestController@nonExistentMethod')

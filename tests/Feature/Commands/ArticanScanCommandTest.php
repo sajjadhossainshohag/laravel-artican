@@ -1,16 +1,16 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Commands;
+namespace SajjadHossain\Artican\Tests\Feature\Commands;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Facades\Doctor;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Facades\Artican;
 
-class DoctorScanCommandTest extends TestCase
+class ArticanScanCommandTest extends TestCase
 {
     /** @test */
     public function it_exits_zero_when_no_issues_found(): void
     {
-        $this->artisan('doctor:scan', [
+        $this->artisan('artican:scan', [
             '--only' => 'env',
         ])->assertExitCode(0);
     }
@@ -18,14 +18,14 @@ class DoctorScanCommandTest extends TestCase
     /** @test */
     public function it_outputs_valid_json_when_json_flag_used(): void
     {
-        $this->artisan('doctor:scan --json')
+        $this->artisan('artican:scan --json')
             ->assertExitCode(0);
     }
 
     /** @test */
     public function it_runs_only_specified_categories(): void
     {
-        $this->artisan('doctor:scan', [
+        $this->artisan('artican:scan', [
             '--only' => 'routes,views',
         ])->assertExitCode(0);
     }

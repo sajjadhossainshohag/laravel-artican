@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\Checks;
+namespace SajjadHossain\Artican\Tests\Fixtures\Checks;
 
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class AlwaysFailsCheck implements HealthCheck
 {

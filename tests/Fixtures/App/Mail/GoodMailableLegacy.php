@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mail;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mail;
 
 use Illuminate\Mail\Mailable;
 

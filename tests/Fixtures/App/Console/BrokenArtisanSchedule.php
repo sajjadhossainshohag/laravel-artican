@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Console;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 

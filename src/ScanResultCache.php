@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor;
+namespace SajjadHossain\Artican;
 
 use Illuminate\Support\Facades\Cache;
 
@@ -8,13 +8,13 @@ class ScanResultCache
 {
     public function remember(string $category, callable $callback): array
     {
-        if (!config('doctor.cache.enabled', true)) {
+        if (!config('artican.cache.enabled', true)) {
             return $callback();
         }
 
         $key = $this->key($category);
-        $ttl = config('doctor.cache.ttl', 3600);
-        $store = config('doctor.cache.store', 'file');
+        $ttl = config('artican.cache.ttl', 3600);
+        $store = config('artican.cache.store', 'file');
 
         return Cache::store($store)->remember($key, $ttl, $callback);
     }
@@ -26,12 +26,12 @@ class ScanResultCache
 
     public function flush(): void
     {
-        $store = config('doctor.cache.store', 'file');
+        $store = config('artican.cache.store', 'file');
         Cache::store($store)->flush();
     }
 
     private function key(string $category): string
     {
-        return "doctor_scan_{$category}";
+        return "artican_scan_{$category}";
     }
 }

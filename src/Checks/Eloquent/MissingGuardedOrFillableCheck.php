@@ -1,14 +1,14 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Eloquent;
+namespace SajjadHossain\Artican\Checks\Eloquent;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class MissingGuardedOrFillableCheck extends PhpAstCheck
 {

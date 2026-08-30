@@ -1,15 +1,15 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Views;
+namespace SajjadHossain\Artican\Checks\Views;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\BladeAstCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\BladeAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class StackPushMismatchCheck extends BladeAstCheck
 {

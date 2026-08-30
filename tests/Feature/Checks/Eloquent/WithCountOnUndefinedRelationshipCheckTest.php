@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Eloquent;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Eloquent;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Eloquent\WithCountOnUndefinedRelationshipCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Eloquent\WithCountOnUndefinedRelationshipCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class WithCountOnUndefinedRelationshipCheckTest extends TestCase
 {

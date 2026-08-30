@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\DTOs;
+namespace SajjadHossain\Artican\DTOs;
 
 final class ScanReport
 {

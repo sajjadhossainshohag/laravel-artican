@@ -1,14 +1,14 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Storage;
+namespace SajjadHossain\Artican\Checks\Storage;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class UndefinedDiskCheck extends PhpAstCheck
 {
@@ -38,7 +38,7 @@ class UndefinedDiskCheck extends PhpAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = $this->scanPaths ?: config('doctor.scan_paths', [app_path(), resource_path('views')]);
+        $paths = $this->scanPaths ?: config('artican.scan_paths', [app_path(), resource_path('views')]);
         $disks = array_keys(config('filesystems.disks', []));
 
         foreach ($this->scanPhpFiles($paths) as $file) {

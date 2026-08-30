@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Queue;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Queue;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Jobs\FailedJobTableMissingCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Jobs\FailedJobTableMissingCheck;
+use SajjadHossain\Artican\Enums\Severity;
 use Illuminate\Support\Facades\Schema;
 
 class FailedJobTableMissingCheckTest extends TestCase

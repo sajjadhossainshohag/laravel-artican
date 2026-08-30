@@ -1,15 +1,15 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Routes;
+namespace SajjadHossain\Artican\Checks\Routes;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class RouteClosureBreaksCacheCheck extends PhpAstCheck
 {

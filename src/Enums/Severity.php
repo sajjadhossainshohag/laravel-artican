@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Enums;
+namespace SajjadHossain\Artican\Enums;
 
 enum Severity: string
 {

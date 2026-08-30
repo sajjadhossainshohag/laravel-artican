@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Broken;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Broken;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Config;
+namespace SajjadHossain\Artican\Checks\Config;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class AbortIfWrongHttpCodeCheck extends PhpAstCheck
 {
@@ -38,7 +38,7 @@ class AbortIfWrongHttpCodeCheck extends PhpAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = $this->scanPaths ?: config('doctor.scan_paths', [app_path(), resource_path('views')]);
+        $paths = $this->scanPaths ?: config('artican.scan_paths', [app_path(), resource_path('views')]);
 
         $targetFns = ['abort_if', 'abort_unless'];
 

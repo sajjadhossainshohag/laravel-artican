@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Listeners;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Listeners;
 
 class SendShipmentNotification
 {

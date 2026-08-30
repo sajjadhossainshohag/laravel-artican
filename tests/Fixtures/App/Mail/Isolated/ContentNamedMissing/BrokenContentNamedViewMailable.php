@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mail\Isolated\ContentNamedMissing;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mail\Isolated\ContentNamedMissing;
 
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;

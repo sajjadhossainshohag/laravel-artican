@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Env;
+namespace SajjadHossain\Artican\Checks\Env;
 
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MissingEnvKeysCheck implements HealthCheck
 {
@@ -51,7 +51,7 @@ class MissingEnvKeysCheck implements HealthCheck
         // whether the call is missing-friendly.
         [$keysWithoutDefault, $keysWithDefault] = $this->findEnvCallsInConfig();
         $envKeys = $this->parseEnvFile($this->envFilePath ?? base_path('.env'));
-        $allowlisted = $this->allowlistedKeys ?: config('doctor.allowlisted_env_keys', []);
+        $allowlisted = $this->allowlistedKeys ?: config('artican.allowlisted_env_keys', []);
         $locations = [];
 
         // Only flag env() calls that have NO default — those are the ones

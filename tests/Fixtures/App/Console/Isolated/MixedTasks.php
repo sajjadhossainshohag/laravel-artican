@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Console\Isolated;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Console\Isolated;
 
 use Illuminate\Support\Facades\Schedule;
 

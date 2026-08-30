@@ -1,17 +1,17 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Eloquent;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Eloquent;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Eloquent\ValueVsFirstOnNullCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Eloquent\ValueVsFirstOnNullCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class ValueVsFirstOnNullCheckTest extends TestCase
 {
     /** @test */
     public function it_detects_unguarded_first_property_call(): void
     {
-        config()->set('doctor.scan_paths', [
+        config()->set('artican.scan_paths', [
             __DIR__.'/../../../Fixtures/App/Isolated/ValueVsFirst',
         ]);
 
@@ -24,7 +24,7 @@ class ValueVsFirstOnNullCheckTest extends TestCase
     /** @test */
     public function it_skips_if_guarded_first_property_call(): void
     {
-        config()->set('doctor.scan_paths', [
+        config()->set('artican.scan_paths', [
             __DIR__.'/../../../Fixtures/App/Isolated/ValueVsFirst',
         ]);
 
@@ -44,7 +44,7 @@ class ValueVsFirstOnNullCheckTest extends TestCase
     /** @test */
     public function it_passes_when_no_first_calls(): void
     {
-        config()->set('doctor.scan_paths', [
+        config()->set('artican.scan_paths', [
             __DIR__.'/../../../Fixtures/App/Isolated/ValueVsFirst/CleanNoFirstCall.php',
         ]);
 

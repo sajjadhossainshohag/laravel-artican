@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Config;
+namespace SajjadHossain\Artican\Checks\Config;
 
 use Illuminate\Support\Arr;
 use PhpParser\Node;
@@ -8,10 +8,10 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\Concerns\ResolvesConfigAliases;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\Concerns\ResolvesConfigAliases;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class NonExistentConfigKeyCheck extends PhpAstCheck
 {
@@ -43,7 +43,7 @@ class NonExistentConfigKeyCheck extends PhpAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = $this->scanPaths ?: config('doctor.scan_paths', [app_path(), resource_path('views')]);
+        $paths = $this->scanPaths ?: config('artican.scan_paths', [app_path(), resource_path('views')]);
 
         foreach ($this->scanPhpFiles($paths) as $file) {
             $stmts = $this->parse($this->stripComments($file['content']));

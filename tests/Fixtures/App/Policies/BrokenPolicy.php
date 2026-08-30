@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Policies;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Policies;
 
 class BrokenPolicy
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Storage;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Storage;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Storage\UndefinedDiskCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Storage\UndefinedDiskCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class UndefinedDiskCheckTest extends TestCase
 {

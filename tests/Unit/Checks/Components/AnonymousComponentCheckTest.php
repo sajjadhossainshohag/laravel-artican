@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Components;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Components;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Components\AnonymousComponentCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Components\AnonymousComponentCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class AnonymousComponentCheckTest extends TestCase
 {
@@ -23,7 +23,7 @@ class AnonymousComponentCheckTest extends TestCase
         $compiler = app('blade.compiler');
 
         // Create a temp directory, register it via anonymousComponentNamespace, then delete it
-        $tempDir = sys_get_temp_dir().'/doctor_anon_component_'.uniqid();
+        $tempDir = sys_get_temp_dir().'/artican_anon_component_'.uniqid();
         mkdir($tempDir, 0777, true);
 
         // Register using the method that populates getAnonymousComponentNamespaces()

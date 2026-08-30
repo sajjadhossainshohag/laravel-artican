@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Broken;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Broken;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,13 +11,13 @@ class BadRelationModel extends Model
 
     public function ghost(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\SajjadHossain\Doctor\Tests\Fixtures\App\Models\Broken\NonExistentRelated::class);
+        return $this->hasMany(\SajjadHossain\Artican\Tests\Fixtures\App\Models\Broken\NonExistentRelated::class);
     }
 
     public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(
-            \SajjadHossain\Doctor\Tests\Fixtures\App\Models\Good\WellDefinedModel::class,
+            \SajjadHossain\Artican\Tests\Fixtures\App\Models\Good\WellDefinedModel::class,
             'completely_wrong_fk',
         );
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Storage;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Storage;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Storage\MissingStorageSymlinkCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Storage\MissingStorageSymlinkCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class StorageLinkMissingCheckTest extends TestCase
 {
@@ -12,14 +12,14 @@ class StorageLinkMissingCheckTest extends TestCase
     public function it_detects_missing_public_storage_symlink(): void
     {
         // Create a temp "public" directory and a temp "storage/app/public" target
-        $publicDir = sys_get_temp_dir().'/doctor_test_public_'.uniqid();
-        $storageDir = sys_get_temp_dir().'/doctor_test_storage_'.uniqid();
+        $publicDir = sys_get_temp_dir().'/artican_test_public_'.uniqid();
+        $storageDir = sys_get_temp_dir().'/artican_test_storage_'.uniqid();
         mkdir($publicDir, 0777, true);
         mkdir($storageDir.'/app/public', 0777, true);
 
         // Mock public_path() and storage_path() to point to our temp dirs
-        app()->instance('path.public', $publicDir);
-        app()->instance('path.storage', $storageDir);
+        app()->usePublicPath($publicDir);
+        app()->useStoragePath($storageDir);
 
         config(['filesystems.disks.public' => ['driver' => 'local', 'root' => $storageDir.'/app/public']]);
 
@@ -37,8 +37,8 @@ class StorageLinkMissingCheckTest extends TestCase
     /** @test */
     public function it_passes_when_public_storage_symlink_exists(): void
     {
-        $publicDir = sys_get_temp_dir().'/doctor_test_public2_'.uniqid();
-        $storageDir = sys_get_temp_dir().'/doctor_test_storage2_'.uniqid();
+        $publicDir = sys_get_temp_dir().'/artican_test_public2_'.uniqid();
+        $storageDir = sys_get_temp_dir().'/artican_test_storage2_'.uniqid();
         mkdir($publicDir, 0777, true);
         mkdir($storageDir.'/app/public', 0777, true);
 
@@ -54,8 +54,8 @@ class StorageLinkMissingCheckTest extends TestCase
         }
         symlink($storageDir.'/app/public', $publicDir.'/storage');
 
-        app()->instance('path.public', $publicDir);
-        app()->instance('path.storage', $storageDir);
+        app()->usePublicPath($publicDir);
+        app()->useStoragePath($storageDir);
         config(['filesystems.disks.public' => ['driver' => 'local', 'root' => $storageDir.'/app/public']]);
 
         $result = (new MissingStorageSymlinkCheck())->run();

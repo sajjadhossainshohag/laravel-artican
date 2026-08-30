@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Jobs;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Closure;

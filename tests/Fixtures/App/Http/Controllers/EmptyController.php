@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Http\Controllers;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Http\Controllers;
 
 class EmptyController
 {

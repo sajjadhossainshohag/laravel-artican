@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Schema;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Schema;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Schema\ColumnMismatchCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Schema\ColumnMismatchCheck;
+use SajjadHossain\Artican\Enums\Severity;
 use Illuminate\Support\Facades\Schema;
 
 class ColumnMismatchCheckTest extends TestCase
@@ -17,7 +17,7 @@ class ColumnMismatchCheckTest extends TestCase
         Schema::dropIfExists('profiles');
 
         $result = (new ColumnMismatchCheck())
-            ->withModels([\SajjadHossain\Doctor\Tests\Fixtures\App\Models\Schema\Profile::class])
+            ->withModels([\SajjadHossain\Artican\Tests\Fixtures\App\Models\Schema\Profile::class])
             ->run();
 
         $this->assertCheckFailed($result, Severity::Warning);
@@ -37,7 +37,7 @@ class ColumnMismatchCheckTest extends TestCase
         });
 
         $result = (new ColumnMismatchCheck())
-            ->withModels([\SajjadHossain\Doctor\Tests\Fixtures\App\Models\Schema\Profile::class])
+            ->withModels([\SajjadHossain\Artican\Tests\Fixtures\App\Models\Schema\Profile::class])
             ->run();
 
         $this->assertCheckFailed($result, Severity::Warning);
@@ -60,7 +60,7 @@ class ColumnMismatchCheckTest extends TestCase
         });
 
         $result = (new ColumnMismatchCheck())
-            ->withModels([\SajjadHossain\Doctor\Tests\Fixtures\App\Models\Schema\Profile::class])
+            ->withModels([\SajjadHossain\Artican\Tests\Fixtures\App\Models\Schema\Profile::class])
             ->run();
 
         $this->assertCheckPassed($result);

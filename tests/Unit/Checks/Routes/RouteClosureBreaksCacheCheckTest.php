@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Routes;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Routes;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Routes\RouteClosureBreaksCacheCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Routes\RouteClosureBreaksCacheCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class RouteClosureBreaksCacheCheckTest extends TestCase
 {

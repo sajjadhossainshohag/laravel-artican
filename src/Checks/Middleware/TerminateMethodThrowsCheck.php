@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Middleware;
+namespace SajjadHossain\Artican\Checks\Middleware;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class TerminateMethodThrowsCheck extends PhpAstCheck
 {

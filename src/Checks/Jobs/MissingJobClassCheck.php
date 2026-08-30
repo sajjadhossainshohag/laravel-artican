@@ -1,13 +1,13 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Jobs;
+namespace SajjadHossain\Artican\Checks\Jobs;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class MissingJobClassCheck extends PhpAstCheck
 {
@@ -29,7 +29,7 @@ class MissingJobClassCheck extends PhpAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = config('doctor.scan_paths', [app_path(), resource_path('views')]);
+        $paths = config('artican.scan_paths', [app_path(), resource_path('views')]);
 
         $dispatchMethods = ['dispatch', 'dispatchIf', 'dispatchUnless'];
 

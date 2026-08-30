@@ -1,9 +1,9 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Jobs;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Jobs;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Jobs\JobDependencyResolutionCheck;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Jobs\JobDependencyResolutionCheck;
 
 class SerializableDependencyPassCheckTest extends TestCase
 {

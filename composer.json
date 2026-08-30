@@ -1,5 +1,5 @@
 {
-  "name": "sajjadhossainshohag/laravel-doctor",
+  "name": "sajjadhossainshohag/laravel-artican",
   "description": "Code Health Checker for Laravel — catch broken routes, missing views, schema mismatches, and runtime errors before deployment.",
   "type": "library",
   "license": "MIT",
@@ -36,21 +36,21 @@
   },
   "autoload": {
     "psr-4": {
-      "SajjadHossain\\Doctor\\": "src/"
+      "SajjadHossain\\Artican\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "SajjadHossain\\Doctor\\Tests\\": "tests/"
+      "SajjadHossain\\Artican\\Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "SajjadHossain\\Doctor\\DoctorServiceProvider"
+        "SajjadHossain\\Artican\\ArticanServiceProvider"
       ],
       "aliases": {
-        "Doctor": "SajjadHossain\\Doctor\\Facades\\Doctor"
+        "Artican": "SajjadHossain\\Artican\\Facades\\Artican"
       }
     }
   },

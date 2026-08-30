@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Eloquent;
+namespace SajjadHossain\Artican\Checks\Eloquent;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class WithCountOnUndefinedRelationshipCheck extends PhpAstCheck
 {

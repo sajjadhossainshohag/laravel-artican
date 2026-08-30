@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Components;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Components;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Components\ComponentNamespaceCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Components\ComponentNamespaceCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class ComponentNamespaceCheckTest extends TestCase
 {

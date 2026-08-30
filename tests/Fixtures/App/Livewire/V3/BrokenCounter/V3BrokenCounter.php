@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Livewire\V3\BrokenCounter;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Livewire\V3\BrokenCounter;
 
 /**
  * Livewire v3 component (in app/Livewire/). The view has a wire:click

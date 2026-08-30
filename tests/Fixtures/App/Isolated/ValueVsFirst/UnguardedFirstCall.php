@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Isolated\ValueVsFirst;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Isolated\ValueVsFirst;
 
 class UnguardedFirstCall
 {

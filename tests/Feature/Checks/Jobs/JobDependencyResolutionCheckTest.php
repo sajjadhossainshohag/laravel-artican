@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Jobs;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Jobs;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Jobs\JobDependencyResolutionCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Jobs\JobDependencyResolutionCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class JobDependencyResolutionCheckTest extends TestCase
 {
@@ -33,7 +33,7 @@ class JobDependencyResolutionCheckTest extends TestCase
 
         // Only ClosureTypedJob should be in locations; SerializableTypedJob must not appear
         $flaggedJobs = array_column($result->locations, 'job');
-        $this->assertContains('SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\ClosureTypedJob', $flaggedJobs);
-        $this->assertNotContains('SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\SerializableTypedJob', $flaggedJobs);
+        $this->assertContains('SajjadHossain\Artican\Tests\Fixtures\App\Jobs\ClosureTypedJob', $flaggedJobs);
+        $this->assertNotContains('SajjadHossain\Artican\Tests\Fixtures\App\Jobs\SerializableTypedJob', $flaggedJobs);
     }
 }

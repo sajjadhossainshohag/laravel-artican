@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Storage;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Storage;
 
 use Illuminate\Support\Facades\Storage;
 

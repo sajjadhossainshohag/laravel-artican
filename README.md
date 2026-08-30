@@ -1,8 +1,8 @@
 <p align="center">
-    <img src="art/laravel-doctor-banner.png" alt="Laravel Doctor" width="100%">
+    <img src="art/laravel-artican-banner.png" alt="Laravel Artican" width="100%">
 </p>
 
-# Laravel Doctor
+# Laravel Artican
 
 **Code Health Checker for Laravel** — catch broken routes, missing views, schema mismatches, and runtime errors before deployment.
 
@@ -15,7 +15,7 @@ Run a single artisan command to scan your entire Laravel codebase for 50+ common
 ## Installation
 
 ```bash
-composer require sajjadhossainshohag/laravel-doctor --dev
+composer require sajjadhossainshohag/laravel-artican --dev
 ```
 
 ## Requirements
@@ -26,13 +26,13 @@ composer require sajjadhossainshohag/laravel-doctor --dev
 Publish the config (optional):
 
 ```bash
-php artisan vendor:publish --tag=doctor-config
+php artisan vendor:publish --tag=artican-config
 ```
 
 ## Usage
 
 ```bash
-php artisan doctor:scan
+php artisan artican:scan
 ```
 
 ### Options
@@ -53,28 +53,28 @@ php artisan doctor:scan
 
 ```bash
 # Scan everything
-php artisan doctor:scan
+php artisan artican:scan
 
 # Only check routes and views
-php artisan doctor:scan --only=routes,views
+php artisan artican:scan --only=routes,views
 
 # Fail CI pipeline on any error or warning
-php artisan doctor:scan --fail-on=error,warning
+php artisan artican:scan --fail-on=error,warning
 
 # JSON output for tooling
-php artisan doctor:scan --json
+php artisan artican:scan --json
 
 # Skip cached results (force re-scan)
-php artisan doctor:scan --no-cache
+php artisan artican:scan --no-cache
 
 # Run checks in parallel (4 workers by default)
-php artisan doctor:scan --parallel
+php artisan artican:scan --parallel
 
 # Run checks in parallel with custom worker count
-php artisan doctor:scan --parallel --workers=8
+php artisan artican:scan --parallel --workers=8
 
 # Agent-readable output (auto-detected when laravel/agent-detector is installed)
-php artisan doctor:scan --format=agent
+php artisan artican:scan --format=agent
 ```
 
 ### Cache
@@ -82,7 +82,7 @@ php artisan doctor:scan --format=agent
 Results are cached (default 3600s). Clear with:
 
 ```bash
-php artisan doctor:cache:clear
+php artisan artican:cache:clear
 ```
 
 ---
@@ -189,13 +189,13 @@ php artisan doctor:cache:clear
 Publish the config to customize:
 
 ```bash
-php artisan vendor:publish --tag=doctor-config
+php artisan vendor:publish --tag=artican-config
 ```
 
 ### `enabled`
 
 ```php
-'enabled' => env('DOCTOR_ENABLED', true),
+'enabled' => env('ARTICAN_ENABLED', true),
 ```
 
 Set to `false` to disable all checks globally.
@@ -243,7 +243,7 @@ Glob patterns per category to skip noisy files (e.g. Telescope, Debugbar, Horizo
 'cache' => [
     'enabled' => true,
     'ttl'     => 3600,           // seconds
-    'store'   => env('DOCTOR_CACHE_STORE', 'file'),
+    'store'   => env('ARTICAN_CACHE_STORE', 'file'),
 ],
 ```
 

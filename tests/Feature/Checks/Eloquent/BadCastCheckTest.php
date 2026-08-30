@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Eloquent;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Eloquent;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Schema\InvalidCastsCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Schema\InvalidCastsCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class BadCastCheckTest extends TestCase
 {
@@ -12,7 +12,7 @@ class BadCastCheckTest extends TestCase
     public function it_detects_cast_to_non_existent_enum_class(): void
     {
         $check = (new InvalidCastsCheck())
-            ->withModels([\SajjadHossain\Doctor\Tests\Fixtures\App\Models\Broken\BadCastModel::class]);
+            ->withModels([\SajjadHossain\Artican\Tests\Fixtures\App\Models\Broken\BadCastModel::class]);
 
         $result = $check->run();
 
@@ -25,7 +25,7 @@ class BadCastCheckTest extends TestCase
     public function it_passes_for_model_with_valid_casts(): void
     {
         $check = (new InvalidCastsCheck())
-            ->withModels([\SajjadHossain\Doctor\Tests\Fixtures\App\Models\Good\WellDefinedModel::class]);
+            ->withModels([\SajjadHossain\Artican\Tests\Fixtures\App\Models\Good\WellDefinedModel::class]);
 
         $result = $check->run();
 

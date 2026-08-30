@@ -1,17 +1,17 @@
 <?php
 
-namespace SajjadHossain\Doctor\Commands;
+namespace SajjadHossain\Artican\Commands;
 
 use Illuminate\Console\Command;
-use SajjadHossain\Doctor\CheckRegistry;
+use SajjadHossain\Artican\CheckRegistry;
 
 class WorkerCommand extends Command
 {
-    protected $signature = 'doctor:worker
+    protected $signature = 'artican:worker
         {--only= : Comma-separated categories to run}
         {--output= : Path to write serialized results}';
 
-    protected $description = '[Internal] Run a subset of doctor checks for parallel execution';
+    protected $description = '[Internal] Run a subset of artican checks for parallel execution';
 
     public function handle(CheckRegistry $registry): int
     {

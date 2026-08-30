@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Views;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Views;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Views\MissingIncludeCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Views\MissingIncludeCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MissingIncludeCheckTest extends TestCase
 {

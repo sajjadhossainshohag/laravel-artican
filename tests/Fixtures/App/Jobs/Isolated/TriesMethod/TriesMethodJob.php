@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\Isolated\TriesMethod;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Jobs\Isolated\TriesMethod;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

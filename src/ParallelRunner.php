@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor;
+namespace SajjadHossain\Artican;
 
 class ParallelRunner
 {
@@ -36,10 +36,10 @@ class ParallelRunner
 
         foreach ($groups as $i => $group) {
             $categoryStr = implode(',', array_keys($group));
-            $tempFile = tempnam(sys_get_temp_dir(), 'doctor_');
+            $tempFile = tempnam(sys_get_temp_dir(), 'artican_');
 
             $cmd = sprintf(
-                '%s %s doctor:worker --only=%s --output=%s --no-interaction 2>&1',
+                '%s %s artican:worker --only=%s --output=%s --no-interaction 2>&1',
                 escapeshellarg($php),
                 escapeshellarg($artisan),
                 escapeshellarg($categoryStr),

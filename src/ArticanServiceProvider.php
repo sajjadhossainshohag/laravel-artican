@@ -1,44 +1,44 @@
 <?php
 
-namespace SajjadHossain\Doctor;
+namespace SajjadHossain\Artican;
 
 use Illuminate\Support\ServiceProvider;
-use SajjadHossain\Doctor\Checks\Blade\MissingNamedRoutesCheck;
-use SajjadHossain\Doctor\Checks\Cache\SessionDriverMismatchCheck;
-use SajjadHossain\Doctor\Checks\Components\{
+use SajjadHossain\Artican\Checks\Blade\MissingNamedRoutesCheck;
+use SajjadHossain\Artican\Checks\Cache\SessionDriverMismatchCheck;
+use SajjadHossain\Artican\Checks\Components\{
     AnonymousComponentCheck,
     ComponentClassCheck,
     ComponentNamespaceCheck,
 };
-use SajjadHossain\Doctor\Checks\Config\{
+use SajjadHossain\Artican\Checks\Config\{
     AbortIfWrongHttpCodeCheck,
     EarlyConfigAccessCheck,
     NonExistentConfigFileCheck,
     NonExistentConfigKeyCheck,
 };
-use SajjadHossain\Doctor\Checks\Container\{
+use SajjadHossain\Artican\Checks\Container\{
     InterfaceBoundToDeletedConcreteCheck,
     SingletonAfterFirstResolveCheck,
 };
-use SajjadHossain\Doctor\Checks\Debug\DebugStatementLeftInCheck;
-use SajjadHossain\Doctor\Checks\Eloquent\{
+use SajjadHossain\Artican\Checks\Debug\DebugStatementLeftInCheck;
+use SajjadHossain\Artican\Checks\Eloquent\{
     AccessorMutatorStyleConflictCheck,
     GetThenCountCheck,
     MissingGuardedOrFillableCheck,
     ValueVsFirstOnNullCheck,
     WithCountOnUndefinedRelationshipCheck,
 };
-use SajjadHossain\Doctor\Checks\Env\{
+use SajjadHossain\Artican\Checks\Env\{
     AppKeyCheck,
     EnvExampleMismatchCheck,
     MissingEnvKeysCheck,
 };
-use SajjadHossain\Doctor\Checks\Events\{
+use SajjadHossain\Artican\Checks\Events\{
     ListenerMissingHandleMethodCheck,
     MissingListenerClassCheck,
 };
-use SajjadHossain\Doctor\Checks\Gates\MissingPolicyClassCheck;
-use SajjadHossain\Doctor\Checks\Jobs\{
+use SajjadHossain\Artican\Checks\Gates\MissingPolicyClassCheck;
+use SajjadHossain\Artican\Checks\Jobs\{
     BusChainCheck,
     FailedJobTableMissingCheck,
     JobDependencyResolutionCheck,
@@ -46,16 +46,16 @@ use SajjadHossain\Doctor\Checks\Jobs\{
     JobTriesZeroCheck,
     MissingJobClassCheck,
 };
-use SajjadHossain\Doctor\Checks\Livewire\MissingLivewireComponentCheck;
-use SajjadHossain\Doctor\Checks\Mail\{
+use SajjadHossain\Artican\Checks\Livewire\MissingLivewireComponentCheck;
+use SajjadHossain\Artican\Checks\Mail\{
     MailableMissingViewCheck,
     MailableVariableMismatchCheck,
 };
-use SajjadHossain\Doctor\Checks\Middleware\{
+use SajjadHossain\Artican\Checks\Middleware\{
     TerminateMethodThrowsCheck,
     UnregisteredMiddlewareCheck,
 };
-use SajjadHossain\Doctor\Checks\Routes\{
+use SajjadHossain\Artican\Checks\Routes\{
     DuplicateRouteNamesCheck,
     DuplicateUrisCheck,
     InvalidMiddlewareCheck,
@@ -63,37 +63,37 @@ use SajjadHossain\Doctor\Checks\Routes\{
     MissingControllerMethodCheck,
     RouteClosureBreaksCacheCheck,
 };
-use SajjadHossain\Doctor\Checks\Schedule\{
+use SajjadHossain\Artican\Checks\Schedule\{
     DeletedScheduledCommandCheck,
     OverlappingJobsWithoutLockCheck,
     ScheduledCommandNotExistsCheck,
 };
-use SajjadHossain\Doctor\Checks\Schema\{
+use SajjadHossain\Artican\Checks\Schema\{
     ColumnMismatchCheck,
     InvalidCastsCheck,
 };
-use SajjadHossain\Doctor\Checks\Security\RequestAllInCreateCheck;
-use SajjadHossain\Doctor\Checks\Storage\{
+use SajjadHossain\Artican\Checks\Security\RequestAllInCreateCheck;
+use SajjadHossain\Artican\Checks\Storage\{
     MissingStorageSymlinkCheck,
     S3UrlWithoutConfigCheck,
     StoreAsPathTraversalCheck,
     UndefinedDiskCheck,
 };
-use SajjadHossain\Doctor\Checks\Validation\{
+use SajjadHossain\Artican\Checks\Validation\{
     AuthorizeAlwaysFalseCheck,
     NonExistentRuleClassCheck,
 };
-use SajjadHossain\Doctor\Checks\Views\{
+use SajjadHossain\Artican\Checks\Views\{
     MissingComponentCheck,
     MissingExtendsCheck,
     MissingIncludeCheck,
     StackPushMismatchCheck,
 };
-use SajjadHossain\Doctor\Commands\CacheClearCommand;
-use SajjadHossain\Doctor\Commands\ScanCommand;
-use SajjadHossain\Doctor\Commands\WorkerCommand;
+use SajjadHossain\Artican\Commands\CacheClearCommand;
+use SajjadHossain\Artican\Commands\ScanCommand;
+use SajjadHossain\Artican\Commands\WorkerCommand;
 
-class DoctorServiceProvider extends ServiceProvider
+class ArticanServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
@@ -102,14 +102,14 @@ class DoctorServiceProvider extends ServiceProvider
             $this->app->singleton(ScanResultCache::class);
         }
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/doctor.php', 'doctor');
+        $this->mergeConfigFrom(__DIR__ . '/../config/artican.php', 'artican');
     }
 
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/doctor.php' => config_path('doctor.php'),
-        ], 'doctor-config');
+            __DIR__ . '/../config/artican.php' => config_path('artican.php'),
+        ], 'artican-config');
 
         if ($this->app->runningInConsole()) {
             $this->app->make(CheckRegistry::class)->registerMany([

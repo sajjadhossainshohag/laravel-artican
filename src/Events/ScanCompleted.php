@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Events;
+namespace SajjadHossain\Artican\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
-use SajjadHossain\Doctor\DTOs\HealthScore;
+use SajjadHossain\Artican\DTOs\HealthScore;
 
 class ScanCompleted
 {

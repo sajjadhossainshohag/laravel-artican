@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Gates;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Gates;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Gates\MissingPolicyClassCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Gates\MissingPolicyClassCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class PolicyRegisteredButMissingClassCheckTest extends TestCase
 {

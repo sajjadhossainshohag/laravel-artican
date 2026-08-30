@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Providers;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

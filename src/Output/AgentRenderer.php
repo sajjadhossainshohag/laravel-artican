@@ -1,8 +1,8 @@
 <?php
 
-namespace SajjadHossain\Doctor\Output;
+namespace SajjadHossain\Artican\Output;
 
-use SajjadHossain\Doctor\DTOs\CheckResult;
+use SajjadHossain\Artican\DTOs\CheckResult;
 
 class AgentRenderer
 {
@@ -28,8 +28,8 @@ class AgentRenderer
                 ];
 
                 match ($result->severity) {
-                    \SajjadHossain\Doctor\Enums\Severity::Error => $errors++,
-                    \SajjadHossain\Doctor\Enums\Severity::Warning => $warnings++,
+                    \SajjadHossain\Artican\Enums\Severity::Error => $errors++,
+                    \SajjadHossain\Artican\Enums\Severity::Warning => $warnings++,
                     default => $info++,
                 };
             }

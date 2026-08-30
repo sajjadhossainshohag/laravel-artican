@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Env;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Env;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Env\AppKeyCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Env\AppKeyCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class AppKeyCheckTest extends TestCase
 {

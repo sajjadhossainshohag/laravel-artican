@@ -1,14 +1,14 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Eloquent;
+namespace SajjadHossain\Artican\Checks\Eloquent;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class GetThenCountCheck extends PhpAstCheck
 {
@@ -38,7 +38,7 @@ class GetThenCountCheck extends PhpAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = $this->scanPaths ?: config('doctor.scan_paths', [app_path()]);
+        $paths = $this->scanPaths ?: config('artican.scan_paths', [app_path()]);
 
         foreach ($this->scanPhpFiles($paths) as $file) {
             $stmts = $this->parse($file['content']);

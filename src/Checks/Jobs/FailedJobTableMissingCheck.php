@@ -1,11 +1,11 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Jobs;
+namespace SajjadHossain\Artican\Checks\Jobs;
 
 use Illuminate\Support\Facades\Schema;
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class FailedJobTableMissingCheck implements HealthCheck
 {

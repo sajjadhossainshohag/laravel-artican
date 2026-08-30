@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Mail;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Mail;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Mail\MailableVariableMismatchCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Mail\MailableVariableMismatchCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MailableVariableMismatchCheckTest extends TestCase
 {

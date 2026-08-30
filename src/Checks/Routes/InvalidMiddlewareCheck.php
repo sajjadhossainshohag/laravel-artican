@@ -1,12 +1,12 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Routes;
+namespace SajjadHossain\Artican\Checks\Routes;
 
 use Illuminate\Support\Facades\Route;
-use SajjadHossain\Doctor\Concerns\ResolvesMiddlewareAliases;
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Concerns\ResolvesMiddlewareAliases;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class InvalidMiddlewareCheck implements HealthCheck
 {

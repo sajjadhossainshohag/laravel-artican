@@ -1,14 +1,14 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Debug;
+namespace SajjadHossain\Artican\Checks\Debug;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\BladeAstCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\BladeAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class DebugStatementLeftInCheck extends BladeAstCheck
 {
@@ -40,7 +40,7 @@ class DebugStatementLeftInCheck extends BladeAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = $this->scanPaths ?: config('doctor.scan_paths', [app_path(), resource_path('views')]);
+        $paths = $this->scanPaths ?: config('artican.scan_paths', [app_path(), resource_path('views')]);
         $targetFns = self::DEBUG_FUNCTIONS;
 
         foreach ($this->scanPhpFiles($paths) as $file) {

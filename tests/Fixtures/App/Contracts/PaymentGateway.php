@@ -1,5 +1,5 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Contracts;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Contracts;
 
 interface PaymentGateway {}

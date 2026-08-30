@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Feature\Checks\Jobs;
+namespace SajjadHossain\Artican\Tests\Feature\Checks\Jobs;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Jobs\JobTriesZeroCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Jobs\JobTriesZeroCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class JobTriesZeroCheckTest extends TestCase
 {

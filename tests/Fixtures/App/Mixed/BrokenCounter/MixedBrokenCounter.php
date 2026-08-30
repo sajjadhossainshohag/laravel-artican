@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mixed\BrokenCounter;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mixed\BrokenCounter;
 
 /**
  * Mixed-project case: a v2-style component that exists in a

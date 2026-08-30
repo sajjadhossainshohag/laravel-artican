@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Isolated\WithCountNested;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Isolated\WithCountNested;
 
 use Illuminate\Database\Eloquent\Model;
 

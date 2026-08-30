@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Components;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Components;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Components\ComponentClassCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Components\ComponentClassCheck;
+use SajjadHossain\Artican\Enums\Severity;
 use Illuminate\Support\Facades\Blade;
 
 class ComponentClassCheckTest extends TestCase

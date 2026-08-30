@@ -1,21 +1,21 @@
 <?php
 
-namespace SajjadHossain\Doctor\Commands;
+namespace SajjadHossain\Artican\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
-use SajjadHossain\Doctor\CheckRegistry;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\Output\AgentRenderer;
-use SajjadHossain\Doctor\Output\ConsoleRenderer;
-use SajjadHossain\Doctor\ParallelRunner;
+use SajjadHossain\Artican\CheckRegistry;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\Output\AgentRenderer;
+use SajjadHossain\Artican\Output\ConsoleRenderer;
+use SajjadHossain\Artican\ParallelRunner;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 class ScanCommand extends Command
 {
-    protected $signature = 'doctor:scan
+    protected $signature = 'artican:scan
         {--only= : Comma-separated check categories to run}
         {--json : Output structured JSON}
         {--html : Output HTML report}
@@ -43,7 +43,7 @@ class ScanCommand extends Command
         }
 
         if (empty($instances)) {
-            $this->warn('No checks registered. Register checks via Doctor::register() in a service provider.');
+            $this->warn('No checks registered. Register checks via Artican::register() in a service provider.');
 
             return 0;
         }
@@ -61,8 +61,8 @@ class ScanCommand extends Command
             $grouped[$check->category()][] = $check;
         }
 
-        $cacheStore = config('doctor.cache.store', 'file');
-        $cacheTtl = config('doctor.cache.ttl', 3600);
+        $cacheStore = config('artican.cache.store', 'file');
+        $cacheTtl = config('artican.cache.ttl', 3600);
 
         $results = [];
         $overallStart = microtime(true);
@@ -203,13 +203,13 @@ class ScanCommand extends Command
         }
 
         if ($this->option('json')) {
-            $this->line((new \SajjadHossain\Doctor\Output\JsonRenderer())->render($results));
+            $this->line((new \SajjadHossain\Artican\Output\JsonRenderer())->render($results));
 
             return $this->failOnExitCode($results);
         }
 
         if ($this->option('html')) {
-            $this->line((new \SajjadHossain\Doctor\Output\HtmlRenderer())->render($results));
+            $this->line((new \SajjadHossain\Artican\Output\HtmlRenderer())->render($results));
 
             return $this->failOnExitCode($results);
         }
@@ -223,7 +223,7 @@ class ScanCommand extends Command
 
     private function computeCacheKey(string $category): string
     {
-        return "doctor_scan_{$category}_" . $this->resolveCacheSalt($category);
+        return "artican_scan_{$category}_" . $this->resolveCacheSalt($category);
     }
 
     private function resolveCacheSalt(string $category): string
@@ -241,7 +241,7 @@ class ScanCommand extends Command
 
         if (! isset(self::$cacheSaltCache['_general'])) {
             self::$cacheSaltCache['_general'] = $this->hashFileMtimes(
-                array_merge(config('doctor.scan_paths', [app_path(), resource_path('views')]), [config_path()])
+                array_merge(config('artican.scan_paths', [app_path(), resource_path('views')]), [config_path()])
             );
         }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Middleware;
+namespace SajjadHossain\Artican\Checks\Middleware;
 
-use SajjadHossain\Doctor\Concerns\ResolvesMiddlewareAliases;
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Concerns\ResolvesMiddlewareAliases;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class UnregisteredMiddlewareCheck implements HealthCheck
 {
@@ -48,7 +48,7 @@ class UnregisteredMiddlewareCheck implements HealthCheck
         ];
         $builtinGroups = ['web', 'api'];
 
-        foreach ($this->scanPaths ?: config('doctor.scan_paths', [app_path()]) as $path) {
+        foreach ($this->scanPaths ?: config('artican.scan_paths', [app_path()]) as $path) {
             if (! is_dir($path)) {
                 continue;
             }

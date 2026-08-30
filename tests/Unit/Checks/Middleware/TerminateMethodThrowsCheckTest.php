@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Middleware;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Middleware;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Middleware\TerminateMethodThrowsCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Middleware\TerminateMethodThrowsCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class TerminateMethodThrowsCheckTest extends TestCase
 {

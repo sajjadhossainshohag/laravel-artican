@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Container;
+namespace SajjadHossain\Artican\Checks\Container;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class SingletonAfterFirstResolveCheck extends PhpAstCheck
 {
@@ -41,7 +41,7 @@ class SingletonAfterFirstResolveCheck extends PhpAstCheck
     {
         $locations = [];
         $paths = $this->scanPaths ?: [app_path('Providers')];
-        $ignore = config('doctor.ignore.container', []);
+        $ignore = config('artican.ignore.container', []);
 
         foreach ($this->scanPhpFiles($paths) as $file) {
             if ($this->isIgnored($file['path'], $ignore)) {

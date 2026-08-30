@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Output;
+namespace SajjadHossain\Artican\Output;
 
 use Illuminate\Console\OutputStyle;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class ConsoleRenderer
 {

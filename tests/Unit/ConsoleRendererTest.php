@@ -1,12 +1,12 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit;
+namespace SajjadHossain\Artican\Tests\Unit;
 
 use Illuminate\Console\OutputStyle;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\Output\ConsoleRenderer;
-use SajjadHossain\Doctor\Tests\TestCase;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\Output\ConsoleRenderer;
+use SajjadHossain\Artican\Tests\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 

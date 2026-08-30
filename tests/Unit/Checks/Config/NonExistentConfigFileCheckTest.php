@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Config;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Config;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Config\NonExistentConfigFileCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Config\NonExistentConfigFileCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class NonExistentConfigFileCheckTest extends TestCase
 {

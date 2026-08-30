@@ -1,17 +1,17 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests;
+namespace SajjadHossain\Artican\Tests;
 
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use SajjadHossain\Doctor\DoctorServiceProvider;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\ArticanServiceProvider;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 abstract class TestCase extends OrchestraTestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [DoctorServiceProvider::class];
+        return [ArticanServiceProvider::class];
     }
 
     protected function getEnvironmentSetUp($app): void

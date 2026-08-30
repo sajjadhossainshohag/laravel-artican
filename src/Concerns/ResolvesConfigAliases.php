@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Concerns;
+namespace SajjadHossain\Artican\Concerns;
 
 trait ResolvesConfigAliases
 {

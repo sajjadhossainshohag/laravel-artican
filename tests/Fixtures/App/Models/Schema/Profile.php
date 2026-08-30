@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Schema;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Schema;
 
 use Illuminate\Database\Eloquent\Model;
 

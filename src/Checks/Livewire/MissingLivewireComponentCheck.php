@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Livewire;
+namespace SajjadHossain\Artican\Checks\Livewire;
 
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class MissingLivewireComponentCheck extends PhpAstCheck
 {

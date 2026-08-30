@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Isolated\BelongsToWrong;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Isolated\BelongsToWrong;
 
 use Illuminate\Database\Eloquent\Model;
 

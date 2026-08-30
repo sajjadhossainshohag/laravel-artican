@@ -1,8 +1,8 @@
 <?php
 
-namespace SajjadHossain\Doctor\Output;
+namespace SajjadHossain\Artican\Output;
 
-use SajjadHossain\Doctor\DTOs\CheckResult;
+use SajjadHossain\Artican\DTOs\CheckResult;
 
 class HtmlRenderer
 {
@@ -25,7 +25,7 @@ class HtmlRenderer
         <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <title>Laravel Doctor Report</title>
+            <title>Laravel Artican Report</title>
             <style>
                 body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
                 h1 { color: #1f2937; }
@@ -35,7 +35,7 @@ class HtmlRenderer
             </style>
         </head>
         <body>
-            <h1>Laravel Doctor Report</h1>
+            <h1>Laravel Artican Report</h1>
             <p>Scanned at: {$this->now()}</p>
             <table>
                 <thead>

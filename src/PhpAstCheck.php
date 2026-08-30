@@ -1,12 +1,12 @@
 <?php
 
-namespace SajjadHossain\Doctor;
+namespace SajjadHossain\Artican;
 
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use SajjadHossain\Doctor\Contracts\HealthCheck;
+use SajjadHossain\Artican\Contracts\HealthCheck;
 
 abstract class PhpAstCheck implements HealthCheck
 {
@@ -49,7 +49,7 @@ abstract class PhpAstCheck implements HealthCheck
 
     protected function scanPhpFiles(array $paths): iterable
     {
-        $ignore = config("doctor.ignore.{$this->category()}", []);
+        $ignore = config("artican.ignore.{$this->category()}", []);
 
         foreach ($paths as $path) {
             if (is_file($path)) {

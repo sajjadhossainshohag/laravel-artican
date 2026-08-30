@@ -4,23 +4,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Doctor Enabled
+    | Artican Enabled
     |--------------------------------------------------------------------------
     |
-    | This option controls whether Doctor runs at all. When set to false, all
+    | This option controls whether Artican runs at all. When set to false, all
     | health checks are skipped globally. Useful for environments where you
     | don't want to run scans (e.g. production).
     |
     */
 
-    'enabled' => env('DOCTOR_ENABLED', true),
+    'enabled' => env('ARTICAN_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------
     | Scan Paths
     |--------------------------------------------------------------------------
     |
-    | Directories that Doctor will recursively scan for PHP and Blade files.
+    | Directories that Artican will recursively scan for PHP and Blade files.
     | Add paths for custom namespaces, package directories, or any location
     | containing code you want analyzed.
     |
@@ -38,7 +38,7 @@ return [
     |
     | Ignored Patterns: Glob patterns per category to exclude from scans.
     | Use these to silence noise from third-party packages, vendor views,
-    | or any pattern you don't want Doctor to analyze.
+    | or any pattern you don't want Artican to analyze.
     |
     | Allowlisted Env Keys: Environment variables referenced in config files
     | without a default value that should NOT be flagged as missing. These
@@ -142,10 +142,10 @@ return [
     | Cache Configuration
     |--------------------------------------------------------------------------
     |
-    | Doctor can cache scan results to avoid re-analyzing unchanged code.
+    | Artican can cache scan results to avoid re-analyzing unchanged code.
     | Set enabled to false to always re-scan, or use --no-cache at runtime.
     |
-    | The store option controls which Laravel cache driver Doctor uses.
+    | The store option controls which Laravel cache driver Artican uses.
     | Supported stores: "file", "redis", "memcached", "array", "database".
     |
     */
@@ -153,7 +153,7 @@ return [
     'cache' => [
         'enabled' => true,
         'ttl'     => 3600,
-        'store'   => env('DOCTOR_CACHE_STORE', 'file'),
+        'store'   => env('ARTICAN_CACHE_STORE', 'file'),
     ],
 
     /*

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Events;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Events;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Events\MissingListenerClassCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Events\MissingListenerClassCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MissingListenerClassCheckTest extends TestCase
 {

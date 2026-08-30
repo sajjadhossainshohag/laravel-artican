@@ -1,19 +1,19 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Storage;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Storage;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Storage\S3UrlWithoutConfigCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Storage\S3UrlWithoutConfigCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class S3UrlWithoutConfigCheckTest extends TestCase
 {
     /** @test */
     public function it_detects_s3_url_without_bucket_or_region(): void
     {
-        // The check uses config('doctor.scan_paths', [...]) internally,
+        // The check uses config('artican.scan_paths', [...]) internally,
         // so we set the config path to our fixture.
-        config()->set('doctor.scan_paths', [
+        config()->set('artican.scan_paths', [
             __DIR__.'/../../../Fixtures/App/Storage',
         ]);
         config()->set('filesystems.disks.s3', []);
@@ -27,7 +27,7 @@ class S3UrlWithoutConfigCheckTest extends TestCase
     /** @test */
     public function it_passes_when_s3_has_required_config(): void
     {
-        config()->set('doctor.scan_paths', [
+        config()->set('artican.scan_paths', [
             __DIR__.'/../../../Fixtures/App/Storage',
         ]);
         config()->set('filesystems.disks.s3', [

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Cache;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Cache;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Cache\SessionDriverMismatchCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Cache\SessionDriverMismatchCheck;
+use SajjadHossain\Artican\Enums\Severity;
 use Illuminate\Support\Facades\Schema;
 
 class SessionDriverMismatchCheckTest extends TestCase

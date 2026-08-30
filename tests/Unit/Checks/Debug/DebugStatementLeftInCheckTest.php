@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Debug;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Debug;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Debug\DebugStatementLeftInCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Debug\DebugStatementLeftInCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class DebugStatementLeftInCheckTest extends TestCase
 {

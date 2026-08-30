@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Mail\Isolated\VariableMismatchNamedArg;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Mail\Isolated\VariableMismatchNamedArg;
 
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;

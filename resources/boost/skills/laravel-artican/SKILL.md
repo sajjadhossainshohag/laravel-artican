@@ -1,32 +1,32 @@
 ---
-name: laravel-doctor
-description: Use Laravel Doctor to scan a Laravel project for code health issues — broken routes, missing views, schema mismatches, invalid middleware, and other static-analysis problems. Use when running doctor:scan, interpreting scan output, fixing issues Doctor reports, or ensuring new code passes all checks.
+name: laravel-artican
+description: Use Laravel Artican to scan a Laravel project for code health issues — broken routes, missing views, schema mismatches, invalid middleware, and other static-analysis problems. Use when running artican:scan, interpreting scan output, fixing issues Artican reports, or ensuring new code passes all checks.
 ---
 
-# Laravel Doctor
+# Laravel Artican
 
 ## When to use this skill
 
-Use this skill when running `php artisan doctor:scan`, debugging a failing check, or writing new code that should pass Laravel Doctor's static analysis. Always run the scan after generating routes, views, middleware, controllers, jobs, events, mailables, or Eloquent models.
+Use this skill when running `php artisan artican:scan`, debugging a failing check, or writing new code that should pass Laravel Artican's static analysis. Always run the scan after generating routes, views, middleware, controllers, jobs, events, mailables, or Eloquent models.
 
 ## Running the scan
 
 ```
-php artisan doctor:scan
+php artisan artican:scan
 ```
 
 Common options:
 
 ```
-php artisan doctor:scan --only=routes,views              # Run specific categories only
-php artisan doctor:scan --fail-on=error                  # Exit code 1 on errors
-php artisan doctor:scan --no-cache                       # Force re-scan, skip cached results
-php artisan doctor:scan --parallel                       # Run checks in parallel subprocesses
-php artisan doctor:scan --parallel --workers=8           # Parallel with custom worker count
-php artisan doctor:scan --json                           # Full JSON output (includes metadata)
-php artisan doctor:scan --format=agent                   # Minimal JSON for AI agents (auto-detected)
-php artisan doctor:scan --html                           # HTML report
-php artisan doctor:cache:clear                           # Clear cached scan results
+php artisan artican:scan --only=routes,views              # Run specific categories only
+php artisan artican:scan --fail-on=error                  # Exit code 1 on errors
+php artisan artican:scan --no-cache                       # Force re-scan, skip cached results
+php artisan artican:scan --parallel                       # Run checks in parallel subprocesses
+php artisan artican:scan --parallel --workers=8           # Parallel with custom worker count
+php artisan artican:scan --json                           # Full JSON output (includes metadata)
+php artisan artican:scan --format=agent                   # Minimal JSON for AI agents (auto-detected)
+php artisan artican:scan --html                           # HTML report
+php artisan artican:cache:clear                           # Clear cached scan results
 ```
 
 ### Parsing results programmatically
@@ -35,13 +35,13 @@ php artisan doctor:cache:clear                           # Clear cached scan res
 
 Use `--format=agent` for AI agents (auto-detected in OpenCode/Claude Code via `laravel/agent-detector`):
 ```
-php artisan doctor:scan --format=agent
+php artisan artican:scan --format=agent
 ```
 Output: `{"status":"pass","issues":0}` or `{"status":"fail","issues":3,"results":[...]}` - minimal, no metadata, no ANSI.
 
 Use `--json` for full metadata (version, timestamps, summary counts):
 ```
-php artisan doctor:scan --json
+php artisan artican:scan --json
 ```
 
 Both outputs contain `check`, `category`, `severity`, `passed`, `message`, `locations[]`, and `suggestion` fields. Reserve the human-readable output only for relaying results directly to the user.
@@ -146,7 +146,7 @@ These checks use AST pattern-matching heuristics or behavior inference that can 
 
 ## Before fixing any reported issue
 
-**Verify the problem is real before making changes.** Doctor does static analysis — it can produce false positives. For every failure:
+**Verify the problem is real before making changes.** Artican does static analysis — it can produce false positives. For every failure:
 
 1. Read the reported file and confirm the issue actually exists
 2. Check whether the referenced class, view, route, middleware alias, disk, env key, or relationship genuinely resolves at runtime
@@ -157,7 +157,7 @@ These checks use AST pattern-matching heuristics or behavior inference that can 
 ## After generating new code, always run
 
 ```
-php artisan doctor:scan
+php artisan artican:scan
 ```
 
 ## Common fixes
@@ -176,10 +176,10 @@ Fix only after verifying the issue is real:
 
 Publish the config to customize behavior:
 ```
-php artisan vendor:publish --tag=doctor-config
+php artisan vendor:publish --tag=artican-config
 ```
 
-Published `config/doctor.php` lets you:
+Published `config/artican.php` lets you:
 - Add custom env keys to `allowlisted_env_keys` so known-optional keys aren't flagged
 - Adjust `ignore` patterns per category
 - Tune cache TTL, health score weights, and scan paths
@@ -189,5 +189,5 @@ Published `config/doctor.php` lets you:
 To temporarily skip a failing check, pass `--only` with the categories you want:
 
 ```
-php artisan doctor:scan --only=routes,views,eloquent
+php artisan artican:scan --only=routes,views,eloquent
 ```

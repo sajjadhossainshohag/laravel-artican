@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Security;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Security;
 
-use SajjadHossain\Doctor\Checks\Security\RequestAllInCreateCheck;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Security\RequestAllInCreateCheck;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
 
 class RequestAllInCreateCheckTest extends TestCase
 {

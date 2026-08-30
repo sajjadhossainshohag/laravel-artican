@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Jobs\Isolated\BackoffMethod;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Jobs\Isolated\BackoffMethod;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

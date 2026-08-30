@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Eloquent;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Eloquent;
 
-use SajjadHossain\Doctor\Checks\Eloquent\GetThenCountCheck;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Eloquent\GetThenCountCheck;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
 
 class GetThenCountCheckTest extends TestCase
 {

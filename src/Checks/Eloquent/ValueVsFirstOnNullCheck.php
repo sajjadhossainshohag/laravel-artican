@@ -1,15 +1,15 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Eloquent;
+namespace SajjadHossain\Artican\Checks\Eloquent;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeVisitorAbstract;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
-use SajjadHossain\Doctor\PhpAstCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
+use SajjadHossain\Artican\PhpAstCheck;
 
 class ValueVsFirstOnNullCheck extends PhpAstCheck
 {
@@ -31,7 +31,7 @@ class ValueVsFirstOnNullCheck extends PhpAstCheck
     public function run(): CheckResult
     {
         $locations = [];
-        $paths = config('doctor.scan_paths', [app_path(), resource_path('views')]);
+        $paths = config('artican.scan_paths', [app_path(), resource_path('views')]);
 
         foreach ($this->scanPhpFiles($paths) as $file) {
             $stmts = $this->parse($file['content']);

@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Middleware;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Middleware;
 
 class RiskyTerminateMiddleware
 {

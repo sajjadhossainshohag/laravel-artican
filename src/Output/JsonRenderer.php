@@ -1,8 +1,8 @@
 <?php
 
-namespace SajjadHossain\Doctor\Output;
+namespace SajjadHossain\Artican\Output;
 
-use SajjadHossain\Doctor\DTOs\CheckResult;
+use SajjadHossain\Artican\DTOs\CheckResult;
 
 class JsonRenderer
 {

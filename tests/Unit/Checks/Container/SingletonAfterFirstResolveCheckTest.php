@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Container;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Container;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Container\SingletonAfterFirstResolveCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Container\SingletonAfterFirstResolveCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class SingletonAfterFirstResolveCheckTest extends TestCase
 {

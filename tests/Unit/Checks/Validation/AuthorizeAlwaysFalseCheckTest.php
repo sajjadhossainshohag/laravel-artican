@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Validation;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Validation;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Validation\AuthorizeAlwaysFalseCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Validation\AuthorizeAlwaysFalseCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class AuthorizeAlwaysFalseCheckTest extends TestCase
 {

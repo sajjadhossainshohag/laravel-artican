@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Livewire;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Livewire;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Livewire\MissingLivewireComponentCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Livewire\MissingLivewireComponentCheck;
+use SajjadHossain\Artican\Enums\Severity;
 
 class MissingLivewireComponentCheckTest extends TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Events;
+namespace SajjadHossain\Artican\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
-use SajjadHossain\Doctor\DTOs\CheckResult;
+use SajjadHossain\Artican\DTOs\CheckResult;
 
 class IssueDetected
 {

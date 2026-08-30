@@ -1,6 +1,6 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Fixtures\App\Models\Isolated\HasManyCorrect;
+namespace SajjadHossain\Artican\Tests\Fixtures\App\Models\Isolated\HasManyCorrect;
 
 use Illuminate\Database\Eloquent\Model;
 

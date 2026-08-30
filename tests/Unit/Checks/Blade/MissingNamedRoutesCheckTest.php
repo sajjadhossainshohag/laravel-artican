@@ -1,10 +1,10 @@
 <?php
 
-namespace SajjadHossain\Doctor\Tests\Unit\Checks\Blade;
+namespace SajjadHossain\Artican\Tests\Unit\Checks\Blade;
 
-use SajjadHossain\Doctor\Tests\TestCase;
-use SajjadHossain\Doctor\Checks\Blade\MissingNamedRoutesCheck;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Tests\TestCase;
+use SajjadHossain\Artican\Checks\Blade\MissingNamedRoutesCheck;
+use SajjadHossain\Artican\Enums\Severity;
 use Illuminate\Support\Facades\Route;
 
 class MissingNamedRoutesCheckTest extends TestCase

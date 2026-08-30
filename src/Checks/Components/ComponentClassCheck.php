@@ -1,11 +1,11 @@
 <?php
 
-namespace SajjadHossain\Doctor\Checks\Components;
+namespace SajjadHossain\Artican\Checks\Components;
 
 use Illuminate\Support\Facades\Blade;
-use SajjadHossain\Doctor\Contracts\HealthCheck;
-use SajjadHossain\Doctor\DTOs\CheckResult;
-use SajjadHossain\Doctor\Enums\Severity;
+use SajjadHossain\Artican\Contracts\HealthCheck;
+use SajjadHossain\Artican\DTOs\CheckResult;
+use SajjadHossain\Artican\Enums\Severity;
 
 class ComponentClassCheck implements HealthCheck
 {
