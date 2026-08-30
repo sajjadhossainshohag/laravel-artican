@@ -6,8 +6,6 @@
 
 **Code Health Checker for Laravel** — catch broken routes, missing views, schema mismatches, and runtime errors before deployment.
 
-> **Beta** — under active development. Things may change.
-
 Run a single artisan command to scan your entire Laravel codebase for 50+ common issues, grouped by category with severity levels.
 
 ---
