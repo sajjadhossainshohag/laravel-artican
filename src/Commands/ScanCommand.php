@@ -149,7 +149,7 @@ class ScanCommand extends Command
                         $results[] = $result;
 
                         if (!$isAgent) {
-                            $this->output->write("  <fg=gray>[{$this->pad($checkIndex, $total)}/{$total}]</> {$result->check}... ");
+                            $this->output->write("  <fg=gray>[{$this->pad($checkIndex, $total)}/{$total}]</> " . ConsoleRenderer::escape($result->check) . "... ");
                             $icon = $result->passed ? '✓' : '✗';
                             $color = $result->passed ? 'green' : ($result->severity === Severity::Error ? 'red' : 'yellow');
                             $this->output->writeln("<fg={$color}>{$icon}</> <fg=gray>cached</>");
@@ -166,7 +166,7 @@ class ScanCommand extends Command
                     $name = $check->name();
 
                     if (!$isAgent) {
-                        $this->output->write("  <fg=gray>[{$this->pad($checkIndex, $total)}/{$total}]</> {$name}... ");
+                        $this->output->write("  <fg=gray>[{$this->pad($checkIndex, $total)}/{$total}]</> " . ConsoleRenderer::escape($name) . "... ");
                     }
 
                     $checkStart = microtime(true);
@@ -221,9 +221,74 @@ class ScanCommand extends Command
 
     private static array $cacheSaltCache = [];
 
+    /** The registered-checks fingerprint, computed once per process (kept apart from the per-category salts). */
+    private static ?string $fingerprint = null;
+
     private function computeCacheKey(string $category): string
     {
-        return "artican_scan_{$category}_" . $this->resolveCacheSalt($category);
+        return "artican_scan_{$category}_" . $this->resolveCacheSalt($category) . '_' . $this->checkFingerprint();
+    }
+
+    private function checkFingerprint(): string
+    {
+        if (self::$fingerprint !== null) {
+            return self::$fingerprint;
+        }
+
+        $classes = app(CheckRegistry::class)->all();
+        $version = $this->packageVersion();
+
+        if ($version !== 'unversioned') {
+            return self::$fingerprint = md5($version . '|' . implode('|', $classes));
+        }
+
+        // Every source file of the package, not a hand-picked list: a shared helper, DTO or enum changes results
+        // too, and reading modification times loads no classes.
+        $mtimes = [];
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__DIR__), RecursiveDirectoryIterator::SKIP_DOTS));
+
+        foreach ($files as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                $mtimes[$file->getPathname()] = $file->getMTime();
+            }
+        }
+
+        ksort($mtimes);
+
+        return self::$fingerprint = md5(serialize($mtimes) . '|' . implode('|', $classes));
+    }
+
+    /** The installed release version, when Composer can tell. A dev or path install is "unversioned" and falls back to the mtimes above. */
+    private function packageVersion(): string
+    {
+        try {
+            if (class_exists(\Composer\InstalledVersions::class)) {
+                $pretty = (string) \Composer\InstalledVersions::getPrettyVersion('sajjadhossainshohag/laravel-artican');
+
+                // A branch ("dev-main", "1.x-dev") or a path install moves without the version changing: the
+                // modification times of the files are the only signal for those.
+                $reference = (string) \Composer\InstalledVersions::getReference('sajjadhossainshohag/laravel-artican');
+                $installPath = \Composer\InstalledVersions::getInstallPath('sajjadhossainshohag/laravel-artican');
+
+                // Not installed under this application's vendor/: a path repository or the package's own checkout,
+                // edited in place.
+                $vendor = realpath(base_path('vendor'));
+                $installed = $installPath === null ? false : realpath($installPath);
+
+                if ($vendor === false || $installed === false || !str_starts_with(str_replace('\\', '/', $installed), str_replace('\\', '/', $vendor) . '/')) {
+                    return 'unversioned';
+                }
+
+                // No reference means a path install, whose files change without the version changing.
+                if ($pretty !== '' && $reference !== '' && !str_starts_with($pretty, 'dev-') && !str_ends_with($pretty, '-dev')) {
+                    return $pretty . '@' . $reference;
+                }
+            }
+        } catch (\Throwable) {
+            // not installed through Composer (e.g. the package's own test run)
+        }
+
+        return 'unversioned';
     }
 
     private function resolveCacheSalt(string $category): string

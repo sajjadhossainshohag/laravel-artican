@@ -3,6 +3,7 @@
 namespace SajjadHossain\Artican\Tests\Feature\Commands;
 
 use ReflectionClass;
+use SajjadHossain\Artican\CheckRegistry;
 use SajjadHossain\Artican\Commands\ScanCommand;
 use SajjadHossain\Artican\Tests\TestCase;
 
@@ -56,6 +57,23 @@ class SecurityCacheSaltTest extends TestCase
     }
 
     /** @test */
+    public function cache_keys_change_when_the_set_of_registered_checks_changes(): void
+    {
+        $key = fn () => (new ReflectionClass(ScanCommand::class))
+            ->getMethod('computeCacheKey')
+            ->invoke(new ScanCommand(), 'security');
+
+        $before = $key();
+
+        // An upgrade that adds a check must not be served results cached by the previous version.
+        $registry = $this->app->make(CheckRegistry::class);
+        $registry->register('Fixtures\\NewlyAddedCheck');
+        $this->resetSaltCache();
+
+        $this->assertNotSame($before, $key());
+    }
+
+    /** @test */
     public function other_categories_are_not_invalidated_by_bootstrap_app(): void
     {
         $before = $this->salt('routes');
@@ -81,7 +99,8 @@ class SecurityCacheSaltTest extends TestCase
 
     private function resetSaltCache(): void
     {
-        $property = (new ReflectionClass(ScanCommand::class))->getProperty('cacheSaltCache');
-        $property->setValue(null, []);
+        $class = new ReflectionClass(ScanCommand::class);
+        $class->getProperty('cacheSaltCache')->setValue(null, []);
+        $class->getProperty('fingerprint')->setValue(null, null);
     }
 }

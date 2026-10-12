@@ -76,9 +76,11 @@ use SajjadHossain\Artican\Checks\Security\{
     AppDebugInProductionCheck,
     CsrfProtectionDisabledCheck,
     EnvOutsideConfigCheck,
+    FileUploadWithoutValidationCheck,
     RawQueryInterpolationCheck,
     RequestAllInCreateCheck,
     UnescapedBladeOutputCheck,
+    WeakHashCheck,
 };
 use SajjadHossain\Artican\Checks\Storage\{
     MissingStorageSymlinkCheck,
@@ -219,6 +221,8 @@ class ArticanServiceProvider extends ServiceProvider
                 UnescapedBladeOutputCheck::class,
                 AppDebugInProductionCheck::class,
                 CsrfProtectionDisabledCheck::class,
+                WeakHashCheck::class,
+                FileUploadWithoutValidationCheck::class,
 
                 // Debug
                 DebugStatementLeftInCheck::class,

@@ -51,6 +51,9 @@ abstract class PhpAstCheck implements HealthCheck
     {
         $ignore = config("artican.ignore.{$this->category()}", []);
 
+        // Overlapping scan paths (app/ and app/Http) must not yield the same file twice, or findings double up.
+        $yielded = [];
+
         foreach ($paths as $path) {
             if (is_file($path)) {
                 if (pathinfo($path, PATHINFO_EXTENSION) !== 'php') {
@@ -63,9 +66,11 @@ abstract class PhpAstCheck implements HealthCheck
                     continue;
                 }
 
-                if ($this->isIgnored($realPath, $ignore)) {
+                if ($this->isIgnored($realPath, $ignore) || isset($yielded[$realPath])) {
                     continue;
                 }
+
+                $yielded[$realPath] = true;
 
                 yield ['path' => $realPath, 'content' => file_get_contents($realPath)];
 
@@ -87,9 +92,16 @@ abstract class PhpAstCheck implements HealthCheck
 
                 $realPath = $file->getRealPath();
 
-                if ($this->isIgnored($realPath, $ignore)) {
+                // A dangling symlink has no real path.
+                if ($realPath === false) {
                     continue;
                 }
+
+                if ($this->isIgnored($realPath, $ignore) || isset($yielded[$realPath])) {
+                    continue;
+                }
+
+                $yielded[$realPath] = true;
 
                 $mtime = $file->getMTime();
                 $cacheKey = $realPath . '|' . $mtime;
@@ -136,6 +148,20 @@ abstract class PhpAstCheck implements HealthCheck
                 $shortNames = $alias ? [$alias, $shortFromFqcn] : [$shortFromFqcn];
                 if (in_array($shortName, $shortNames, true)) {
                     return $fqcn;
+                }
+            }
+        }
+
+        // Grouped imports: use App\Http\Requests\{StoreFooRequest, UpdateFooRequest as Update};
+        if (preg_match_all('/^\s*use\s+([\w\\\\]+)\\\\\{([^}]*)\}\s*;/m', $fileContent, $groups, PREG_SET_ORDER)) {
+            foreach ($groups as $group) {
+                foreach (explode(',', $group[2]) as $member) {
+                    $parts = preg_split('/\s+as\s+/i', trim($member));
+                    $imported = trim($parts[0]);
+
+                    if ($imported !== '' && trim($parts[1] ?? basename(str_replace('\\', '/', $imported))) === $shortName) {
+                        return ltrim($group[1], '\\') . '\\' . $imported;
+                    }
                 }
             }
         }
