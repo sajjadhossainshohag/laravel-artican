@@ -4,30 +4,27 @@
 
 # Laravel Artican
 
-**Code Health Checker for Laravel** — catch broken routes, missing views, schema mismatches, and runtime errors before deployment.
+Artican reads your Laravel code and tells you what is broken before you deploy. It finds things like routes that point to missing controllers, views that don't exist, and database columns your models expect but the table doesn't have.
 
-Run a single artisan command to scan your entire Laravel codebase for 50+ common issues, grouped by category with severity levels.
+You run one command. It checks over 50 common problems and shows them grouped by topic, each marked as an error, a warning, or info.
 
 ---
 
-## Installation
+## Install
 
 ```bash
 composer require sajjadhossainshohag/laravel-artican --dev
 ```
 
-## Requirements
+You need PHP 8.1 or newer and Laravel 10, 11, 12 or 13.
 
-- PHP ^8.1
-- Laravel ^10.0 | ^11.0 | ^12.0 | ^13.0
-
-Publish the config (optional):
+If you want to change the settings, publish the config file:
 
 ```bash
 php artisan vendor:publish --tag=artican-config
 ```
 
-## Usage
+## Run a scan
 
 ```bash
 php artisan artican:scan
@@ -35,49 +32,47 @@ php artisan artican:scan
 
 ### Options
 
-| Option | Description |
+| Option | What it does |
 |---|---|
-| `--only=routes,views,env` | Comma-separated categories to scan |
-| `--json` | Output as JSON |
-| `--html` | Output as HTML |
-| `--fail-on=error,warning` | Exit code 1 if issues at these severities exist |
-| `--no-cache` | Skip cached results |
-| `--parallel` | Distribute checks across parallel subprocesses |
-| `--workers=N` | Number of parallel workers (auto-detected from CPU by default) |
-| `--format=agent` | Machine-readable JSON for AI agents (auto-detected in OpenCode/Claude Code when `laravel/agent-detector` is installed) |
-| `--help` | Display help |
+| `--only=routes,views,env` | Only check the topics you list |
+| `--json` | Print the results as JSON |
+| `--html` | Print the results as HTML |
+| `--fail-on=error,warning` | Exit with code 1 if any issue of these levels is found (useful in CI) |
+| `--no-cache` | Ignore saved results and scan again |
+| `--parallel` | Split the work across several processes to go faster |
+| `--workers=N` | How many processes to use with `--parallel` (picked from your CPU count by default) |
+| `--format=agent` | Short JSON output made for AI tools. It turns on by itself inside tools like Claude Code or OpenCode if `laravel/agent-detector` is installed |
+| `--help` | Show help |
 
 ### Examples
 
 ```bash
-# Scan everything
+# Check everything
 php artisan artican:scan
 
-# Only check routes and views
+# Check only routes and views
 php artisan artican:scan --only=routes,views
 
-# Fail CI pipeline on any error or warning
+# Make your CI job fail on any error or warning
 php artisan artican:scan --fail-on=error,warning
 
-# JSON output for tooling
+# Get JSON for other tools to read
 php artisan artican:scan --json
 
-# Skip cached results (force re-scan)
+# Force a fresh scan
 php artisan artican:scan --no-cache
 
-# Run checks in parallel (4 workers by default)
+# Scan faster using several processes
 php artisan artican:scan --parallel
-
-# Run checks in parallel with custom worker count
 php artisan artican:scan --parallel --workers=8
 
-# Agent-readable output (auto-detected when laravel/agent-detector is installed)
+# Output for AI agents
 php artisan artican:scan --format=agent
 ```
 
-### Cache
+### Caching
 
-Results are cached (default 3600s). Clear with:
+Results are saved for one hour (3600 seconds) so repeat scans are quick. To delete the saved results:
 
 ```bash
 php artisan artican:cache:clear
@@ -85,106 +80,106 @@ php artisan artican:cache:clear
 
 ---
 
-## What It Catches
+## What Artican checks
 
 ### Routes
-- **MissingControllerCheck** — route references a controller class that doesn't exist
-- **MissingControllerMethodCheck** — route references a method that doesn't exist on the controller
-- **DuplicateRouteNamesCheck** — two or more routes share the same `->name()`
-- **DuplicateUrisCheck** — two or more routes share the same URI + HTTP method
-- **InvalidMiddlewareCheck** — route references middleware that is not registered
-- **RouteClosureBreaksCacheCheck** — route uses closures instead of controller strings, preventing `php artisan route:cache`
+- **MissingControllerCheck**: a route uses a controller class that doesn't exist.
+- **MissingControllerMethodCheck**: a route calls a method the controller doesn't have.
+- **DuplicateRouteNamesCheck**: two routes have the same name.
+- **DuplicateUrisCheck**: two routes have the same URL and HTTP method.
+- **InvalidMiddlewareCheck**: a route uses middleware that isn't registered.
+- **RouteClosureBreaksCacheCheck**: a route uses a closure, which stops `php artisan route:cache` from working.
 
 ### Views
-- **MissingIncludeCheck** — `@include('view')` references a view that doesn't exist
-- **MissingExtendsCheck** — `@extends('layout')` references a layout that doesn't exist
-- **MissingComponentCheck** — `@component('name')` references a component that doesn't exist
-- **StackPushMismatchCheck** — `@push('name')` exists but no corresponding `@stack('name')`
+- **MissingIncludeCheck**: `@include('view')` points to a view that doesn't exist.
+- **MissingExtendsCheck**: `@extends('layout')` points to a layout that doesn't exist.
+- **MissingComponentCheck**: `@component('name')` points to a component that doesn't exist.
+- **StackPushMismatchCheck**: `@push('name')` is used but nothing has a matching `@stack('name')`.
 
 ### Blade
-- **MissingNamedRoutesCheck** — Blade templates calling `route('name')` where the route is undefined, or using `url('name')` where `route()` should be used
+- **MissingNamedRoutesCheck**: a template calls `route('name')` for a route that isn't defined, or uses `url('name')` when `route()` was meant.
 
 ### Components
-- **ComponentClassCheck** — Blade component alias references a class that doesn't exist
-- **ComponentNamespaceCheck** — view namespace maps to a non-existent directory
-- **AnonymousComponentCheck** — anonymous component namespace maps to a non-existent directory
+- **ComponentClassCheck**: a Blade component alias points to a class that doesn't exist.
+- **ComponentNamespaceCheck**: a view namespace points to a folder that doesn't exist.
+- **AnonymousComponentCheck**: an anonymous component namespace points to a folder that doesn't exist.
 
 ### Eloquent / Models
-- **WithCountOnUndefinedRelationshipCheck** — `->withCount('rel')` where the relationship method doesn't exist
-- **ValueVsFirstOnNullCheck** — `->first()->property` without a null guard (crashes on empty result)
-- **MissingGuardedOrFillableCheck** — model has neither `$fillable` nor `$guarded` (mass-assignment unprotected)
-- **AccessorMutatorStyleConflictCheck** — model mixes old-style accessors with new `Attribute::make()` pattern
-- **GetThenCountCheck** — `->get()` or `->all()` followed by `->count()` instead of a single `->count()` query
+- **WithCountOnUndefinedRelationshipCheck**: `->withCount('rel')` uses a relationship the model doesn't define.
+- **ValueVsFirstOnNullCheck**: `->first()->property` with no null check, which crashes if nothing is found.
+- **MissingGuardedOrFillableCheck**: a model has neither `$fillable` nor `$guarded`, so mass assignment is unprotected.
+- **AccessorMutatorStyleConflictCheck**: a model mixes the old accessor style with the newer `Attribute::make()` style.
+- **GetThenCountCheck**: `->get()` or `->all()` followed by `->count()`, instead of one `->count()` query.
 
 ### Schema / Database
-- **ColumnMismatchCheck** — `$fillable` or `$casts` columns don't exist in the actual database table
-- **InvalidCastsCheck** — model `$casts` references invalid cast types or classes
+- **ColumnMismatchCheck**: columns in `$fillable` or `$casts` don't exist in the real table.
+- **InvalidCastsCheck**: a model's `$casts` uses a cast type or class that isn't valid.
 
 ### Cache
-- **SessionDriverMismatchCheck** — session driver is `database` but the sessions table doesn't exist
+- **SessionDriverMismatchCheck**: the session driver is `database` but the sessions table doesn't exist.
 
 ### Config
-- **EarlyConfigAccessCheck** — `config()` called inside a service provider's `register()` method
-- **AbortIfWrongHttpCodeCheck** — `abort_if()` / `abort_unless()` called with a code below 400
-- **NonExistentConfigFileCheck** — `config('file.key')` references a config file that doesn't exist
-- **NonExistentConfigKeyCheck** — `config('file.key')` references a config key that doesn't exist
+- **EarlyConfigAccessCheck**: `config()` is called inside a service provider's `register()` method.
+- **AbortIfWrongHttpCodeCheck**: `abort_if()` or `abort_unless()` is given a status code below 400.
+- **NonExistentConfigFileCheck**: `config('file.key')` uses a config file that doesn't exist.
+- **NonExistentConfigKeyCheck**: `config('file.key')` uses a key that doesn't exist.
 
 ### Security
-- **RequestAllInCreateCheck** — raw `request()->all()` passed to mass-assignment methods (`create()`, `update()`), bypassing `$fillable` protection
+- **RequestAllInCreateCheck**: `request()->all()` is passed straight into `create()` or `update()`, which skips `$fillable` protection.
 
 ### Debug
-- **DebugStatementLeftInCheck** — `dd()`, `dump()`, `var_dump()`, `ray()`, etc. left in PHP or Blade files
+- **DebugStatementLeftInCheck**: `dd()`, `dump()`, `var_dump()`, `ray()` and similar calls are left in PHP or Blade files.
 
 ### Jobs / Queue
-- **MissingJobClassCheck** — `Job::dispatch()` references a class that doesn't exist
-- **BusChainCheck** — `Bus::chain()` references a job class that doesn't exist
-- **JobHasHandleMethodCheck** — `ShouldQueue` class has no `handle()` method
-- **JobDependencyResolutionCheck** — job constructor has unresolvable type-hinted parameter
-- **JobTriesZeroCheck** — job has `public $tries = 0` (never retries)
-- **FailedJobTableMissingCheck** — `failed_jobs` table doesn't exist
+- **MissingJobClassCheck**: `Job::dispatch()` uses a class that doesn't exist.
+- **BusChainCheck**: `Bus::chain()` includes a job class that doesn't exist.
+- **JobHasHandleMethodCheck**: a `ShouldQueue` class has no `handle()` method.
+- **JobDependencyResolutionCheck**: a job's constructor asks for a type that Laravel can't build.
+- **JobTriesZeroCheck**: a job sets `public $tries = 0`, so it never retries.
+- **FailedJobTableMissingCheck**: the `failed_jobs` table doesn't exist.
 
 ### Events
-- **MissingListenerClassCheck** — event listener class doesn't exist
-- **ListenerMissingHandleMethodCheck** — listener has no `handle()` method
+- **MissingListenerClassCheck**: an event listener class doesn't exist.
+- **ListenerMissingHandleMethodCheck**: a listener has no `handle()` method.
 
 ### Middleware
-- **UnregisteredMiddlewareCheck** — `->middleware('alias')` used but alias not registered
-- **TerminateMethodThrowsCheck** — `terminate()` makes external calls without try/catch
+- **UnregisteredMiddlewareCheck**: `->middleware('alias')` is used but the alias isn't registered.
+- **TerminateMethodThrowsCheck**: `terminate()` makes outside calls without try/catch.
 
 ### Validation
-- **NonExistentRuleClassCheck** — custom rule class instantiated but doesn't exist
-- **AuthorizeAlwaysFalseCheck** — FormRequest `authorize()` hardcoded to `return false`
+- **NonExistentRuleClassCheck**: a custom rule class is used but doesn't exist.
+- **AuthorizeAlwaysFalseCheck**: a FormRequest's `authorize()` always returns `false`.
 
 ### Storage
-- **UndefinedDiskCheck** — `Storage::disk('name')` references an undefined disk
-- **StoreAsPathTraversalCheck** — `->storeAs()` path contains `..` (path traversal risk)
-- **S3UrlWithoutConfigCheck** — S3 `url()` called without full configuration
-- **MissingStorageSymlinkCheck** — `public/storage` symlink doesn't exist
+- **UndefinedDiskCheck**: `Storage::disk('name')` uses a disk that isn't defined.
+- **StoreAsPathTraversalCheck**: a `->storeAs()` path contains `..`, which is a path traversal risk.
+- **S3UrlWithoutConfigCheck**: S3 `url()` is called but S3 isn't fully configured.
+- **MissingStorageSymlinkCheck**: the `public/storage` symlink doesn't exist.
 
 ### Container
-- **SingletonAfterFirstResolveCheck** — singleton registered in `boot()` instead of `register()`
-- **InterfaceBoundToDeletedConcreteCheck** — container binding references a deleted concrete class
+- **SingletonAfterFirstResolveCheck**: a singleton is registered in `boot()` instead of `register()`.
+- **InterfaceBoundToDeletedConcreteCheck**: a container binding points to a class that has been deleted.
 
 ### Schedule
-- **ScheduledCommandNotExistsCheck** — `$schedule->command(Class::class)` references a non-existent class
-- **DeletedScheduledCommandCheck** — `$schedule->command('name')` references an unregistered command
-- **OverlappingJobsWithoutLockCheck** — frequent task doesn't use `->withoutOverlapping()`
+- **ScheduledCommandNotExistsCheck**: `$schedule->command(Class::class)` uses a class that doesn't exist.
+- **DeletedScheduledCommandCheck**: `$schedule->command('name')` uses a command that isn't registered.
+- **OverlappingJobsWithoutLockCheck**: a frequent task doesn't use `->withoutOverlapping()`.
 
 ### Gates
-- **MissingPolicyClassCheck** — `Gate::policy()` references a policy class that doesn't exist
+- **MissingPolicyClassCheck**: `Gate::policy()` uses a policy class that doesn't exist.
 
 ### Livewire
-- **MissingLivewireComponentCheck** — `<livewire:name>` used but component class doesn't exist
+- **MissingLivewireComponentCheck**: `<livewire:name>` is used but the component class doesn't exist.
 
 ### Mail
-- **MailableMissingViewCheck** — mailable's `->view('name')` references a view that doesn't exist
-- **MailableVariableMismatchCheck** — mailable passes variables to a template that doesn't use them
+- **MailableMissingViewCheck**: a mailable's `->view('name')` uses a view that doesn't exist.
+- **MailableVariableMismatchCheck**: a mailable sends variables that the template never uses.
 
 ---
 
 ## Configuration
 
-Publish the config to customize:
+Publish the config file first:
 
 ```bash
 php artisan vendor:publish --tag=artican-config
@@ -196,7 +191,7 @@ php artisan vendor:publish --tag=artican-config
 'enabled' => env('ARTICAN_ENABLED', true),
 ```
 
-Set to `false` to disable all checks globally.
+Set to `false` to turn off all checks.
 
 ### `scan_paths`
 
@@ -207,7 +202,7 @@ Set to `false` to disable all checks globally.
 ],
 ```
 
-Directories scanned for PHP/Blade files. Add paths for custom namespaces or package directories.
+The folders Artican reads. Add more if you keep code in other places, such as custom namespaces or local packages.
 
 ### `ignore`
 
@@ -233,7 +228,7 @@ Directories scanned for PHP/Blade files. Add paths for custom namespaces or pack
 ],
 ```
 
-Glob patterns per category to skip noisy files (e.g. Telescope, Debugbar, Horizon routes, vendor views).
+For each topic, a list of patterns to skip. Use it to silence noise from things like Telescope, Debugbar, Horizon, or vendor views.
 
 ### `cache`
 
@@ -245,7 +240,7 @@ Glob patterns per category to skip noisy files (e.g. Telescope, Debugbar, Horizo
 ],
 ```
 
-Caches scan results per check. Set `enabled` to `false` or use `--no-cache` to always re-scan.
+Controls how scan results are saved. Set `enabled` to `false`, or pass `--no-cache`, to always scan fresh.
 
 ### `health_score`
 
@@ -275,7 +270,7 @@ Caches scan results per check. Set `enabled` to `false` or use `--no-cache` to a
 ],
 ```
 
-Relative weight of each category for calculating an overall code health score.
+How much each topic counts toward your overall health score. A higher number means problems in that topic hurt the score more.
 
 ---
 
