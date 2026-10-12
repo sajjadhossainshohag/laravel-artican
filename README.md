@@ -126,6 +126,11 @@ php artisan artican:cache:clear
 
 ### Security
 - **RequestAllInCreateCheck**: `request()->all()` is passed straight into `create()` or `update()`, which skips `$fillable` protection.
+- **EnvOutsideConfigCheck**: `env()` is called outside the `config/` folder. It returns `null` once you run `config:cache`.
+- **RawQueryInterpolationCheck**: a variable is put inside raw SQL (`whereRaw`, `selectRaw`, `orderByRaw`, `DB::raw`, `DB::select` and similar) instead of being passed as a binding. This is an SQL injection risk.
+- **UnescapedBladeOutputCheck**: `{!! !!}` is used in a Blade template, which does not escape the value and can allow XSS. `$slot`, `csrf_field()` and `method_field()` are not flagged.
+- **AppDebugInProductionCheck**: `APP_DEBUG` is `true` while `APP_ENV` is `production`.
+- **CsrfProtectionDisabledCheck**: the CSRF `$except` list, `validateCsrfTokens(except: ...)`, or `VerifyCsrfToken::except(...)` contains `*`, which turns CSRF protection off for every route.
 
 ### Debug
 - **DebugStatementLeftInCheck**: `dd()`, `dump()`, `var_dump()`, `ray()` and similar calls are left in PHP or Blade files.

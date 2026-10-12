@@ -72,7 +72,14 @@ use SajjadHossain\Artican\Checks\Schema\{
     ColumnMismatchCheck,
     InvalidCastsCheck,
 };
-use SajjadHossain\Artican\Checks\Security\RequestAllInCreateCheck;
+use SajjadHossain\Artican\Checks\Security\{
+    AppDebugInProductionCheck,
+    CsrfProtectionDisabledCheck,
+    EnvOutsideConfigCheck,
+    RawQueryInterpolationCheck,
+    RequestAllInCreateCheck,
+    UnescapedBladeOutputCheck,
+};
 use SajjadHossain\Artican\Checks\Storage\{
     MissingStorageSymlinkCheck,
     S3UrlWithoutConfigCheck,
@@ -207,6 +214,11 @@ class ArticanServiceProvider extends ServiceProvider
 
                 // Security
                 RequestAllInCreateCheck::class,
+                EnvOutsideConfigCheck::class,
+                RawQueryInterpolationCheck::class,
+                UnescapedBladeOutputCheck::class,
+                AppDebugInProductionCheck::class,
+                CsrfProtectionDisabledCheck::class,
 
                 // Debug
                 DebugStatementLeftInCheck::class,

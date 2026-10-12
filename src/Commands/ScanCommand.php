@@ -239,6 +239,19 @@ class ScanCommand extends Command
             ]);
         }
 
+        if ($category === 'security') {
+            // Security checks also read .env, bootstrap/app.php, the view paths, and the live app.env/app.debug values.
+            return self::$cacheSaltCache['security'] ??= md5(
+                $this->hashFileMtimes(
+                    array_merge(
+                        config('artican.scan_paths', [app_path(), resource_path('views')]),
+                        (array) config('view.paths', []),
+                        [config_path(), base_path('.env'), base_path('bootstrap/app.php')]
+                    )
+                ) . serialize([config('app.env'), config('app.debug')])
+            );
+        }
+
         if (! isset(self::$cacheSaltCache['_general'])) {
             self::$cacheSaltCache['_general'] = $this->hashFileMtimes(
                 array_merge(config('artican.scan_paths', [app_path(), resource_path('views')]), [config_path()])
