@@ -9,13 +9,11 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 
 class ConsoleRenderer
 {
-    /** Text safe to put inside console markup: "<...>" in names, paths and messages stays literal. */
     public static function escape(mixed $value): string
     {
         $text = is_scalar($value) || $value === null ? (string) $value : (string) json_encode($value, JSON_UNESCAPED_SLASHES);
 
-        // Every "<" is escaped on its own. OutputFormatter::escape() on older Symfony versions consumes the
-        // character before a "<", so the second "<" of "<<b>>" would stay live.
+        // Escape every "<" on its own: OutputFormatter::escape() on older Symfony leaves the second "<" of "<<b>>" live.
         return OutputFormatter::escapeTrailingBackslash(str_replace('<', '\\<', $text));
     }
 
@@ -26,8 +24,6 @@ class ConsoleRenderer
         $warnings = 0;
         $infos = 0;
 
-        // Names, paths and messages can contain "<...>" (e.g. a file called "<x>.key"), which the console
-        // would parse as a style tag, so every interpolated value is escaped.
         $e = static fn (mixed $value): string => self::escape($value);
 
         foreach ($results as $result) {

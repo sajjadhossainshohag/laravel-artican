@@ -21,7 +21,6 @@ use SajjadHossain\Artican\PhpAstCheck;
 
 class RawQueryInterpolationCheck extends PhpAstCheck
 {
-    /** Query builder methods whose first argument is raw SQL. */
     private const RAW_METHODS = [
         'whereraw',
         'orwhereraw',
@@ -33,7 +32,6 @@ class RawQueryInterpolationCheck extends PhpAstCheck
         'fromraw',
     ];
 
-    /** Methods that are raw SQL only when called statically on the DB facade. */
     private const DB_FACADE_METHODS = [
         'raw',
         'select',
@@ -104,7 +102,7 @@ class RawQueryInterpolationCheck extends PhpAstCheck
                     $isRaw = in_array($method, $this->rawMethods, true)
                         || ($node instanceof StaticCall && $this->isDbFacade($node) && in_array($method, $this->dbMethods, true))
                         || ($node instanceof MethodCall && $node->var instanceof StaticCall && $this->isDbFacade($node->var)
-                            && $method !== 'raw' && in_array($method, $this->dbMethods, true)); // DB::connection('x')->select(...)
+                            && $method !== 'raw' && in_array($method, $this->dbMethods, true));
 
                     if (!$isRaw) {
                         return;
@@ -183,7 +181,6 @@ class RawQueryInterpolationCheck extends PhpAstCheck
                     return true;
                 }
 
-                /** Functions whose result cannot carry user-controlled text. */
                 private function isSafeFunction(FuncCall $call): bool
                 {
                     foreach (['intval', 'floatval', 'count'] as $name) {
@@ -192,14 +189,12 @@ class RawQueryInterpolationCheck extends PhpAstCheck
                         }
                     }
 
-                    // str_repeat('?,', $n)
                     if ($this->isFunction($call, 'str_repeat')) {
                         $first = $call->args[0] ?? null;
 
                         return $first instanceof Arg && !$this->isTainted($first->value);
                     }
 
-                    // implode(',', array_fill(0, $n, '?'))
                     if ($this->isFunction($call, 'implode') || $this->isFunction($call, 'join')) {
                         $last = $call->args[count($call->args) - 1] ?? null;
                         if (!$last instanceof Arg || !$last->value instanceof FuncCall || !$this->isFunction($last->value, 'array_fill')) {
@@ -214,7 +209,6 @@ class RawQueryInterpolationCheck extends PhpAstCheck
                     return false;
                 }
 
-                /** A %d/%f/... placeholder can only produce a number, so its argument is safe. */
                 private function isSprintfTainted(FuncCall $call): bool
                 {
                     $args = $call->args;
@@ -240,7 +234,6 @@ class RawQueryInterpolationCheck extends PhpAstCheck
                     $values = array_slice($args, 1);
 
                     if ($positional) {
-                        // Argument order is not sequential: safe only if every placeholder is numeric.
                         if (count(array_filter($conversions, static fn ($c) => !$numeric($c))) === 0) {
                             return false;
                         }

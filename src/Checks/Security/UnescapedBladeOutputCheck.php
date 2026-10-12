@@ -8,7 +8,6 @@ use SajjadHossain\Artican\PhpAstCheck;
 
 class UnescapedBladeOutputCheck extends PhpAstCheck
 {
-    /** Expressions that are known to produce trusted HTML. */
     private const SAFE_PATTERNS = [
         '/^\$slot$/',
         '/^csrf_field\(\s*\)$/',
@@ -93,7 +92,6 @@ class UnescapedBladeOutputCheck extends PhpAstCheck
         );
     }
 
-    /** Remove Blade comments and @verbatim blocks, keeping line numbers intact. */
     private function blankOut(string $content): string
     {
         $blank = static fn (array $m): string => str_repeat("\n", substr_count($m[0], "\n"));
@@ -105,7 +103,6 @@ class UnescapedBladeOutputCheck extends PhpAstCheck
 
     private function isTrusted(string $expression): bool
     {
-        // A plain string literal cannot carry user input.
         if (preg_match('/^(\'[^\']*\'|"[^"$\{]*")$/', $expression)) {
             return true;
         }

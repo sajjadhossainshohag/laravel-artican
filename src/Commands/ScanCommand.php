@@ -221,7 +221,6 @@ class ScanCommand extends Command
 
     private static array $cacheSaltCache = [];
 
-    /** The registered-checks fingerprint, computed once per process (kept apart from the per-category salts). */
     private static ?string $fingerprint = null;
 
     private function computeCacheKey(string $category): string
@@ -242,8 +241,7 @@ class ScanCommand extends Command
             return self::$fingerprint = md5($version . '|' . implode('|', $classes));
         }
 
-        // Every source file of the package, not a hand-picked list: a shared helper, DTO or enum changes results
-        // too, and reading modification times loads no classes.
+        // Every package source file, not a hand-picked list; reading modification times loads no classes.
         $mtimes = [];
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__DIR__), RecursiveDirectoryIterator::SKIP_DOTS));
 
@@ -258,20 +256,16 @@ class ScanCommand extends Command
         return self::$fingerprint = md5(serialize($mtimes) . '|' . implode('|', $classes));
     }
 
-    /** The installed release version, when Composer can tell. A dev or path install is "unversioned" and falls back to the mtimes above. */
     private function packageVersion(): string
     {
         try {
             if (class_exists(\Composer\InstalledVersions::class)) {
                 $pretty = (string) \Composer\InstalledVersions::getPrettyVersion('sajjadhossainshohag/laravel-artican');
 
-                // A branch ("dev-main", "1.x-dev") or a path install moves without the version changing: the
-                // modification times of the files are the only signal for those.
+                // Dev branches and path installs change without the version changing: they fall back to file mtimes.
                 $reference = (string) \Composer\InstalledVersions::getReference('sajjadhossainshohag/laravel-artican');
                 $installPath = \Composer\InstalledVersions::getInstallPath('sajjadhossainshohag/laravel-artican');
 
-                // Not installed under this application's vendor/: a path repository or the package's own checkout,
-                // edited in place.
                 $vendor = realpath(base_path('vendor'));
                 $installed = $installPath === null ? false : realpath($installPath);
 
@@ -279,13 +273,11 @@ class ScanCommand extends Command
                     return 'unversioned';
                 }
 
-                // No reference means a path install, whose files change without the version changing.
                 if ($pretty !== '' && $reference !== '' && !str_starts_with($pretty, 'dev-') && !str_ends_with($pretty, '-dev')) {
                     return $pretty . '@' . $reference;
                 }
             }
         } catch (\Throwable) {
-            // not installed through Composer (e.g. the package's own test run)
         }
 
         return 'unversioned';
@@ -305,7 +297,6 @@ class ScanCommand extends Command
         }
 
         if ($category === 'security') {
-            // Security checks also read .env, bootstrap/app.php, the view paths, and the live app.env/app.debug values.
             return self::$cacheSaltCache['security'] ??= md5(
                 $this->hashFileMtimes(
                     array_merge(

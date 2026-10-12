@@ -13,7 +13,6 @@ use SajjadHossain\Artican\PhpAstCheck;
 
 class CsrfProtectionDisabledCheck extends PhpAstCheck
 {
-    /** Method in bootstrap/app.php (Laravel 11+) that takes the CSRF `except` list. */
     private const EXCEPT_METHODS = ['validatecsrftokens'];
 
     private array $scanPaths = [];
@@ -50,7 +49,6 @@ class CsrfProtectionDisabledCheck extends PhpAstCheck
         $seen = [];
 
         foreach ($this->scanPhpFiles($paths) as $file) {
-            // CSRF is configured in PHP classes and bootstrap/app.php, never in Blade templates.
             if (str_ends_with($file['path'], '.blade.php') || isset($seen[$file['path']])) {
                 continue;
             }
@@ -94,7 +92,6 @@ class CsrfProtectionDisabledCheck extends PhpAstCheck
                         return;
                     }
 
-                    // ->validateCsrfTokens(except: ['*']) or VerifyCsrfToken::except(['*'])
                     if (
                         ($node instanceof MethodCall || $node instanceof StaticCall)
                         && $this->isCsrfExceptCall($node)

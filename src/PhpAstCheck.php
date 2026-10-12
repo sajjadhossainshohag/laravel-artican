@@ -51,7 +51,6 @@ abstract class PhpAstCheck implements HealthCheck
     {
         $ignore = config("artican.ignore.{$this->category()}", []);
 
-        // Overlapping scan paths (app/ and app/Http) must not yield the same file twice, or findings double up.
         $yielded = [];
 
         foreach ($paths as $path) {
@@ -92,7 +91,6 @@ abstract class PhpAstCheck implements HealthCheck
 
                 $realPath = $file->getRealPath();
 
-                // A dangling symlink has no real path.
                 if ($realPath === false) {
                     continue;
                 }
@@ -152,7 +150,6 @@ abstract class PhpAstCheck implements HealthCheck
             }
         }
 
-        // Grouped imports: use App\Http\Requests\{StoreFooRequest, UpdateFooRequest as Update};
         if (preg_match_all('/^\s*use\s+([\w\\\\]+)\\\\\{([^}]*)\}\s*;/m', $fileContent, $groups, PREG_SET_ORDER)) {
             foreach ($groups as $group) {
                 foreach (explode(',', $group[2]) as $member) {

@@ -30,27 +30,20 @@ use SajjadHossain\Artican\PhpAstCheck;
 
 class FileUploadWithoutValidationCheck extends PhpAstCheck
 {
-    /** Methods on an uploaded file that write it to disk. */
     private const FILE_WRITE_METHODS = ['store', 'storeas', 'storepublicly', 'storepubliclyas', 'move'];
 
-    /** Filesystem methods that take an uploaded file as an argument. */
     private const DISK_WRITE_METHODS = ['putfile', 'putfileas'];
 
-    /** Filesystem methods that write whatever content they are given, e.g. Storage::put($path, $upload). */
     private const DISK_CONTENT_METHODS = ['put', 'write', 'writestream', 'putstream', 'append', 'prepend', 'copy', 'move'];
 
-    /** Plain PHP functions that persist data; flagged when an uploaded file feeds them. */
     private const PHP_WRITE_FUNCTIONS = ['file_put_contents', 'move_uploaded_file', 'copy', 'rename'];
 
-    /** Every method name that may write an upload; the precise test (is the argument an upload?) comes later. */
-    /** Methods that read facts about an upload without touching its content. */
     private const UPLOAD_METADATA_METHODS = [
         'getclientoriginalname', 'getclientoriginalextension', 'getclientmimetype', 'getmimetype', 'getsize',
         'getclientsize', 'extension', 'guessextension', 'guessclientextension', 'hashname', 'getfilename',
         'getbasename', 'isvalid', 'geterror', 'geterrormessage',
     ];
 
-    /** Rules that say nothing about an upload: presence and plain-type checks. Anything else (max, size, a custom rule) constrains it. */
     private const NON_FILE_RULES = [
         'required', 'nullable', 'sometimes', 'present', 'filled', 'bail', 'array', 'string', 'integer', 'int', 'numeric',
         'boolean', 'bool', 'email', 'url', 'date', 'exists', 'unique', 'in', 'not_in', 'regex', 'alpha', 'alpha_num',
@@ -63,14 +56,12 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         ...self::DISK_CONTENT_METHODS,
     ];
 
-    /** Request methods that return uploaded file(s). */
     private const FILE_SOURCE_METHODS = ['file', 'allfiles'];
 
     private array $scanPaths = [];
 
     private ?NodeFinder $nodeFinder = null;
 
-    /** @var array<string, bool> memoized isFormRequest() answers for the file being analysed, keyed by type name */
     private array $formRequestCache = [];
 
     public function withPaths(array $paths): static
@@ -104,7 +95,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 continue;
             }
 
-            // Cheap prefilter: nothing to report unless the file writes a file somewhere.
             if (
                 preg_match('/(->|::)\s*(store|storeAs|storePublicly|storePubliclyAs|move|putFile|putFileAs)\s*\(/i', $file['content']) !== 1
                 && preg_match('/\b(file_put_contents|move_uploaded_file|copy|rename)\s*\(/i', $file['content']) !== 1
@@ -124,7 +114,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             $this->formRequestCache = [];
 
             $visitor = new class extends NodeVisitorAbstract {
-                /** @var Node[] outermost functions, methods and closures */
                 public array $functions = [];
 
                 private int $depth = 0;
@@ -135,7 +124,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                         return;
                     }
 
-                    // Nested closures are analysed as part of their outermost function.
                     if ($this->depth === 0) {
                         $this->functions[] = $node;
                     }
@@ -154,7 +142,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
             $this->traverse($stmts, $visitor);
 
-            // Keyed by file offset, so two writes on one line are two findings (and one write is never counted twice).
             $writes = [];
             foreach ($visitor->functions as $function) {
                 foreach ($this->analyzeFunction($function, $file['content']) as $write) {
@@ -195,19 +182,16 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         );
     }
 
-    /** Lines of upload writes in an outermost function (and the closures inside it) that can run before validation. */
     private function analyzeFunction(Node $function, string $fileContent): array
     {
         $finder = $this->finder();
 
-        // Nothing to report in a function that never writes a file.
         if ($finder->findFirst($function, fn (Node $n) => $this->isPotentialWrite($n)) === null) {
             return [];
         }
 
         $requestVariables = [];
 
-        // Request-typed parameters anywhere in the function, including nested closures (`function (Request $req)`).
         foreach ($finder->findInstanceOf($function, Node\Param::class) as $param) {
             if (!$param->var instanceof Variable || !is_string($param->var->name)) {
                 continue;
@@ -220,7 +204,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             }
         }
 
-        // Input names the code treats as file inputs: hasFile('photo'), file('photo').
         $fields = [];
         foreach ($finder->find($function, fn (Node $n) => ($n instanceof MethodCall || $n instanceof NullsafeMethodCall) && $n->name instanceof Node\Identifier) as $call) {
             $first = $call->args[0] ?? null;
@@ -235,9 +218,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             }
         }
 
-        // request: names of request variables; files: variables holding uploads; fields: upload input names
-        // seen in hasFile()/file() calls; validators: variables holding a validator; content: the file source.
-        // $validator = Validator::make(...): later $validator->fails()/validate() enforce validation.
         $validators = [];
         foreach ($finder->findInstanceOf($function, Assign::class) as $assign) {
             if ($assign->var instanceof Variable && is_string($assign->var->name) && $this->isValidator($assign->expr, [], ['content' => $fileContent])) {
@@ -245,7 +225,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             }
         }
 
-        // Uploads whose input name is not a literal (allFiles(), file($field)): rules cannot be matched to them by key.
         $openFields = $finder->findFirst($function, function (Node $n) use ($requestVariables): bool {
             if (!($n instanceof MethodCall || $n instanceof NullsafeMethodCall) || !$n->name instanceof Node\Identifier || !$this->isRequestLike($n->var, $requestVariables)) {
                 return false;
@@ -263,10 +242,8 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return $this->analyzeUnit($function, false, $context);
     }
 
-    /** One function body in execution order; nested closures are analysed in turn with the state at their definition. */
     private function analyzeUnit(Node $function, bool $inheritedValidated, array $context): array
     {
-        // A FormRequest parameter validates before the function runs.
         foreach ($function->getParams() as $param) {
             foreach ($this->typeNames($param->type) as $typeName) {
                 if ($this->isFormRequest($typeName, $context['content'])) {
@@ -281,13 +258,7 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return $lines;
     }
 
-    /**
-     * Walk code in execution order, tracking whether the request has definitely been validated by now.
-     * Returns the "validated" state after $node. Writes made while not validated are added to $lines.
-     *
-     * Branches are analysed with the state at their start; after an if/else the request counts as
-     * validated only if every branch (that does not return or throw) validated it.
-     */
+    /** Walks code in execution order, tracking whether the request has definitely been validated by now. */
     private function flow(mixed $node, bool $validated, array $context, array &$lines): bool
     {
         if (is_array($node)) {
@@ -311,9 +282,7 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         if ($node instanceof Stmt\If_) {
             $validated = $this->flow($node->cond, $validated, $context, $lines);
 
-            // `if ($validator->fails()) { return ...; }`: fails()/passes() only enforce anything through the
-            // branch that is taken. The branch where the check passed continues as validated; the other one is
-            // handled as usual, so it only helps if it exits.
+            // fails()/passes() only guard through the branch taken: the branch where it passed continues validated.
             $guard = $this->validatorGuard($node->cond, $context);
             $thenState = $guard === false ? true : $validated;
             $elseState = $guard === true ? true : $validated;
@@ -321,7 +290,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             $branches = [$this->branch($node->stmts, $thenState, $context, $lines)];
 
             foreach ($node->elseifs as $elseif) {
-                // Reached only when the conditions above were false, so `elseif ($v->fails()) { return; }` is a guard too.
                 $elseState = $this->flow($elseif->cond, $elseState, $context, $lines);
                 $elseifGuard = $this->validatorGuard($elseif->cond, $context);
 
@@ -332,7 +300,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 }
             }
 
-            // Without an else, the implicit "condition was false" path continues with the else state.
             $branches[] = $node->else === null
                 ? $elseState
                 : $this->branch($node->else->stmts, $elseState, $context, $lines);
@@ -344,7 +311,7 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             $validated = $this->flow($node->expr, $validated, $context, $lines);
             $this->flow($node->stmts, $validated, $context, $lines);
 
-            return $validated; // the loop body may run zero times
+            return $validated;
         }
 
         if ($node instanceof Stmt\For_) {
@@ -380,13 +347,11 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 $this->flow($case->cond, $validated, $context, $lines);
                 $hasDefault = $hasDefault || $case->cond === null;
 
-                // `case 'a': case 'b': ...` : an empty case shares the code of the case below it. An empty LAST
-                // case (or `default:`) shares nothing: it is a path that does nothing, validated or not.
+                // An empty case falls through to the next one; an empty last case or default is a path that does nothing.
                 if ($case->stmts === [] && $index < $lastIndex) {
                     continue;
                 }
 
-                // A trailing `break` only leaves the switch, so the code after it still runs.
                 $stmts = $case->stmts;
                 if (end($stmts) instanceof Stmt\Break_) {
                     array_pop($stmts);
@@ -395,13 +360,11 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 $branches[] = $this->branch($stmts, $validated, $context, $lines);
             }
 
-            // Validated afterwards only if some case always runs (there is a default) and every case validated.
             return $hasDefault && $branches !== [] ? !in_array(false, $branches, true) : $validated;
         }
 
         if ($node instanceof Stmt\TryCatch) {
-            // After try/catch the request is validated only if the try body validated it and every catch
-            // that continues did too: a catch that swallows the failure leaves the request unvalidated.
+            // A catch that swallows the failure leaves the request unvalidated.
             $states = [$this->flow($node->stmts, $validated, $context, $lines)];
 
             foreach ($node->catches as $catch) {
@@ -428,7 +391,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             || $node instanceof BinaryOp\LogicalAnd
             || $node instanceof BinaryOp\LogicalOr
         ) {
-            // The right operand only runs sometimes.
             $validated = $this->flow($node->left, $validated, $context, $lines);
             $this->flow($node->right, $validated, $context, $lines);
 
@@ -446,7 +408,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return $validated;
         }
 
-        // Everything else runs its children first (arguments, receivers), then the node itself.
         foreach ($node->getSubNodeNames() as $name) {
             $validated = $this->flow($node->$name, $validated, $context, $lines);
         }
@@ -466,7 +427,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return $validated;
     }
 
-    /** State after a branch; a branch that returns or throws never continues, so it cannot weaken the result. */
     private function branch(array $stmts, bool $validated, array $context, array &$lines): bool
     {
         $after = $this->flow($stmts, $validated, $context, $lines);
@@ -486,7 +446,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return false;
         }
 
-        // throw, exit/die, abort(403)
         return $last->expr instanceof Node\Expr\Throw_
             || $last->expr instanceof Node\Expr\Exit_
             || ($last->expr instanceof FuncCall && $last->expr->name instanceof Node\Name && strtolower($last->expr->name->getLast()) === 'abort');
@@ -494,13 +453,11 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
     private function isUploadWrite(Node $call, array $context): bool
     {
-        // file_put_contents(storage_path($file->getClientOriginalName()), $file->get()), move_uploaded_file($_FILES[...]), copy(...)
         if ($call instanceof FuncCall) {
             if (!$call->name instanceof Node\Name || !in_array(strtolower($call->name->getLast()), self::PHP_WRITE_FUNCTIONS, true)) {
                 return false;
             }
 
-            // file_put_contents($path, $data): the data. copy($from, $to), rename(...), move_uploaded_file($from, ...): the source.
             $position = strtolower($call->name->getLast()) === 'file_put_contents' ? 1 : 0;
 
             return $this->argumentHoldsUpload($call->args, $position, $context);
@@ -512,7 +469,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
         $method = strtolower($call->name->toString());
 
-        // $request->file('x')->store(...)  /  $request->photo->store(...)  /  $file->move(...)
         if (
             ($call instanceof MethodCall || $call instanceof NullsafeMethodCall)
             && in_array($method, self::FILE_WRITE_METHODS, true)
@@ -521,7 +477,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return true;
         }
 
-        // Storage::putFile('dir', $file)  /  Storage::disk('s3')->putFileAs('dir', $file, 'name')
         if (in_array($method, self::DISK_WRITE_METHODS, true)) {
             foreach ($call->args as $arg) {
                 if ($arg instanceof Node\Arg && $this->isUploadedFile($arg->value, $context)) {
@@ -530,21 +485,13 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             }
         }
 
-        // Storage::disk('public')->put('x/' . $file->getClientOriginalName(), file_get_contents($upload))
         if (in_array($method, self::DISK_CONTENT_METHODS, true) && $this->isFilesystem($call, $context)) {
-            // put($path, $contents): the contents. copy($from, $to) / move($from, $to): the source.
             return $this->argumentHoldsUpload($call->args, in_array($method, ['copy', 'move'], true) ? 0 : 1, $context);
         }
 
         return false;
     }
 
-    /**
-     * Does the argument at $position carry the upload itself (the file, its contents, its path)? Calls that only
-     * read metadata, such as `$file->getClientOriginalName()`, do not: logging a file name is not storing the file.
-     *
-     * @param array<int, Node\Arg|Node\VariadicPlaceholder> $args
-     */
     private function argumentHoldsUpload(array $args, int $position, array $context): bool
     {
         $arg = $args[$position] ?? null;
@@ -577,7 +524,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return false;
     }
 
-    /** The Storage / File facade, also under an alias (`use Illuminate\Support\Facades\Storage as Disk;`). */
     private function isFacade(Node\Name $name, string $facade, array $context): bool
     {
         $short = $name->getLast();
@@ -587,12 +533,11 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         if ($short === $facade && $imported) {
             $namespace = rtrim((string) ($import[1] ?? ''), '\\');
 
-            // `use Storage;` is the global alias; `use Illuminate\Support\Facades\Storage;` the facade itself.
             return $namespace === '' || str_ends_with($namespace, 'Facades');
         }
 
         if ($short === $facade) {
-            return true; // the global alias (\Storage, \File) or the same file declares nothing else under that name
+            return true;
         }
 
         $fqcn = $this->resolveFqcn($context['content'], $name->toString());
@@ -600,7 +545,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return $fqcn !== null && str_ends_with($fqcn, '\\Facades\\' . $facade);
     }
 
-    /** Storage::..., Storage::disk()->..., or a variable that looks like a disk ($disk, $storage, $filesystem, $this->files). */
     private function isFilesystem(Node $call, array $context): bool
     {
         $root = $call instanceof StaticCall ? $call : $call->var;
@@ -614,20 +558,16 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 && ($this->isFacade($root->class, 'Storage', $context) || $this->isFacade($root->class, 'File', $context));
         }
 
-        // $disk, $this->disk, $this->storage, $filesystem
         $name = match (true) {
             $root instanceof Variable => is_string($root->name) ? $root->name : '',
             $root instanceof PropertyFetch || $root instanceof NullsafePropertyFetch => $root->name instanceof Node\Identifier ? $root->name->toString() : '',
             default => '',
         };
 
-        // $disk, $storage, $filesystem, $fs, $publicDisk, $s3Storage; and, as a property only, $this->files.
-        // Not $storageManager or $file: any object with those words in its name is not a disk.
         return preg_match('/^(disk|storage|filesystem|fs)$|[a-z0-9](Disk|Storage|Filesystem)$/', $name) === 1
             || ($root instanceof PropertyFetch && $name === 'files');
     }
 
-    /** Methods, functions, closures and arrow functions: the units this check analyses. */
     public static function isFunctionLikeNode(Node $node): bool
     {
         return $node instanceof ClassMethod
@@ -636,7 +576,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             || $node instanceof ArrowFunction;
     }
 
-    /** A call that could write a file; the precise test (is it an upload?) comes later. */
     private function isPotentialWrite(Node $node): bool
     {
         if ($node instanceof FuncCall) {
@@ -653,11 +592,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return $this->nodeFinder ??= new NodeFinder;
     }
 
-    /**
-     * A call that actually enforces validation: $request->validate(), $this->validate($request, ...),
-     * Validator::make(...)->validate(), $validator->validate() for a validator built earlier. Building a
-     * validator enforces nothing, and fails()/passes() only enforce through the branch taken (see validatorGuard()).
-     */
     private function isValidationCall(Node $node, array $context): bool
     {
         if (!($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall) || !$node->name instanceof Node\Identifier) {
@@ -666,12 +600,9 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
         $name = $node->name->toString();
 
-        // The framework's own methods: validate(), validateWithBag(), validateWith().
         $standard = in_array(strtolower($name), ['validate', 'validatewithbag', 'validatewith'], true);
 
-        // A custom controller helper such as validateUpload($request) or validateAvatarFile($request): camelCase
-        // after "validate" and a word that says it is about the request or its upload. validateQuota(),
-        // validateOwnership(), validateSignature() and validatedData() say nothing about the upload.
+        // Custom helpers count only when named after the upload or request: validateQuota() says nothing about it.
         $helper = !$standard && preg_match('/^validate(?=[A-Z])\w*(?i:upload|file|image|attachment|document|photo|media|avatar|request|input|data|form)/', $name) === 1;
 
         if ($node instanceof StaticCall) {
@@ -681,7 +612,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
             $class = $node->class->getLast();
 
-            // self::validateUpload($request), static::validateFile($request): a helper handed the request or upload.
             if ($helper && in_array(strtolower($class), ['self', 'static', 'parent'], true)) {
                 foreach ($node->args as $arg) {
                     if ($arg instanceof Node\Arg && ($this->isRequestLike($arg->value, $context['request']) || $this->isUploadedFile($arg->value, $context))) {
@@ -690,7 +620,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 }
             }
 
-            // Request::validate(...), Validator::validate($data, $rules)
             if ($standard && $class === 'Request') {
                 return true;
             }
@@ -700,9 +629,7 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 && $this->rulesCoverUploads($node, $context, 1);
         }
 
-        // $validator->validate() / ->validated(), where $validator comes from Validator::make() or validator().
         if (in_array(strtolower($name), ['validate', 'validatewithbag', 'validated'], true) && $this->isValidator($node->var, $context['validators'], $context)) {
-            // Validator::make($data, $rules)->validate(): the literal rules must say something about the upload.
             $root = $node->var;
             while ($root instanceof MethodCall || $root instanceof NullsafeMethodCall) {
                 $root = $root->var;
@@ -715,8 +642,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return false;
         }
 
-        // $validator->validateUpload($request), $this->uploadValidator->validateFile($request): a helper that is
-        // handed the request, on whatever object provides it.
         if ($helper) {
             foreach ($node->args as $arg) {
                 if ($arg instanceof Node\Arg && ($this->isRequestLike($arg->value, $context['request']) || $this->isUploadedFile($arg->value, $context))) {
@@ -727,14 +652,10 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return false;
         }
 
-        // $request->validate(): the receiver is the request.
         if ($standard && $this->isRequestLike($node->var, $context['request'])) {
             return $this->rulesCoverUploads($node, $context);
         }
 
-        // $this->validate($request, ...) is the controller trait. A custom helper such as
-        // $this->validateUpload($request) counts only if it is handed the request; $this->validateQuota() or
-        // $this->validateOwnership($order) say nothing about the upload.
         if ($this->isThis($node->var) && $standard) {
             return $this->rulesCoverUploads($node, $context);
         }
@@ -742,15 +663,8 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return false;
     }
 
-    /**
-     * Does a literal rules array in this validate() call say anything about files? True unless the rules are a
-     * literal array whose keys are none of the upload fields and whose rules never mention file, image, mimes ...:
-     * `$request->validate(['name' => 'required'])` does not validate `$request->file('doc')`.
-     * Rules that are not a literal array (a variable, a method call) are given the benefit of the doubt.
-     */
     private function rulesCoverUploads(Node $call, array $context, ?int $rulesPosition = null): bool
     {
-        // $request->validate($rules, $messages) vs $this->validate($request, $rules, $messages)
         $position = $rulesPosition ?? (($call instanceof MethodCall || $call instanceof NullsafeMethodCall) && $call->var instanceof Variable && $call->var->name === 'this' ? 1 : 0);
         $rulesArgument = null;
 
@@ -762,14 +676,14 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         }
 
         if (!$rulesArgument instanceof Node\Expr\Array_) {
-            return true; // a variable or method call: cannot tell
+            return true;
         }
 
         $rules = $rulesArgument;
 
         foreach ($rules->items as $item) {
             if ($item === null || !$item->key instanceof String_) {
-                return true; // dynamic keys: cannot tell
+                return true;
             }
 
             $key = $item->key->value;
@@ -789,15 +703,14 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                     if ($inner !== null && $inner->value instanceof String_) {
                         array_push($names, ...$this->ruleNames($inner->value->value));
                     } else {
-                        return true; // Rule::file(), new MyRule(): cannot tell
+                        return true;
                     }
                 }
             } else {
                 return true;
             }
 
-            // A file rule validates the upload on its own key. On another key it only counts when the upload's
-            // field name cannot be known (allFiles(), file($field)): `['avatar' => 'image']` does not validate `doc`.
+            // A file rule counts on the upload's own key; on another key only when the field name is not a literal.
             if (
                 array_intersect($names, ['file', 'image', 'mimes', 'mimetypes', 'dimensions', 'extensions']) !== []
                 && ($isUploadKey || $context['openFields'])
@@ -805,7 +718,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 return true;
             }
 
-            // On the upload's own key, any constraint (max, size, a custom rule) counts; "required" alone does not.
             if ($isUploadKey && array_diff($names, self::NON_FILE_RULES) !== []) {
                 return true;
             }
@@ -814,7 +726,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return false;
     }
 
-    /** @return string[] rule names from "required|mimes:pdf,png|max:2048" => [required, mimes, max] */
     private function ruleNames(string $rules): array
     {
         return array_values(array_filter(array_map(
@@ -823,7 +734,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         )));
     }
 
-    /** abort_if($validator->fails(), 422) / abort_unless($validator->passes(), 422), and the throw_* equivalents. */
     private function abortsOnInvalid(Node $node, array $context): bool
     {
         if (!$node instanceof FuncCall || !$node->name instanceof Node\Name) {
@@ -839,15 +749,9 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
         $guard = $this->validatorGuard($first->value, $context);
 
-        // *_if stops when the condition holds, so the condition must mean "invalid"; *_unless is the reverse.
         return $guard === str_ends_with($name, '_if');
     }
 
-    /**
-     * What a condition says about a validator: true if the condition being true means validation FAILED
-     * ($v->fails(), !$v->passes()), false if it being true means it PASSED ($v->passes(), !$v->fails()),
-     * null if the condition has nothing to do with a validator.
-     */
     private function validatorGuard(Node $cond, array $context): ?bool
     {
         if ($cond instanceof Node\Expr\BooleanNot) {
@@ -856,7 +760,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return $inner === null ? null : !$inner;
         }
 
-        // `$v->fails() || $x`: when it is false, $v did not fail. `$v->passes() && $x`: when it is true, $v passed.
         if ($cond instanceof BinaryOp\BooleanOr || $cond instanceof BinaryOp\LogicalOr) {
             return $this->validatorGuard($cond->left, $context) === true || $this->validatorGuard($cond->right, $context) === true ? true : null;
         }
@@ -880,7 +783,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return null;
     }
 
-    /** Validator::make(...), validator(...), or a variable assigned from one (through any method chain). */
     private function isValidator(Node $expr, array $validatorVariables, array $context): bool
     {
         while ($expr instanceof MethodCall || $expr instanceof NullsafeMethodCall) {
@@ -903,11 +805,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             && strtolower($expr->name->getLast()) === 'validator';
     }
 
-    /**
-     * Class names in a parameter type, unwrapping ?Foo, Foo|Bar and Foo&Bar.
-     *
-     * @return string[]
-     */
     private function typeNames(?Node $type): array
     {
         if ($type instanceof Node\Name) {
@@ -927,7 +824,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
 
     private function isFormRequest(string $typeName, string $fileContent): bool
     {
-        // The cache is cleared for every file (see run()): the answer depends on that file's `use` imports.
         return $this->formRequestCache[$typeName] ??= $this->resolveIsFormRequest($typeName, $fileContent);
     }
 
@@ -939,7 +835,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             return false;
         }
 
-        // This file declares it as a FormRequest.
         if (preg_match('/\bclass\s+' . preg_quote($short, '/') . '\s+extends\s+[\w\\\\]*FormRequest\b/', $fileContent) === 1) {
             return true;
         }
@@ -947,7 +842,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         $fqcn = $this->resolveFqcn($fileContent, $typeName);
         $conventional = str_ends_with($short, 'Request') || str_contains((string) $fqcn, '\\Requests\\');
 
-        // `User $user`, `OrderService $service`: nothing that is worth autoloading during a static scan.
         if (!$conventional) {
             return false;
         }
@@ -957,19 +851,11 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 return is_subclass_of($fqcn, \Illuminate\Foundation\Http\FormRequest::class);
             }
         } catch (\Throwable) {
-            // Autoloading failed (e.g. a parent class from an uninstalled package): use the name below.
         }
 
-        // The class cannot be loaded: a FormRequest if it lives in a conventional Requests namespace
-        // (App\Http\Requests\StoreFooRequest); a DTO or PSR type that merely ends in "Request" is not.
         return str_contains((string) $fqcn, '\\Requests\\');
     }
 
-    /**
-     * Names of variables that hold an uploaded file (or files), including copies, loop items and array elements.
-     *
-     * @return string[]
-     */
     private function uploadedFileVariables(array $stmts, NodeFinder $finder, array $context): array
     {
         $assigns = $finder->findInstanceOf($stmts, Assign::class);
@@ -1003,8 +889,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
                 }
             }
 
-            // collect($files)->each(fn ($f) => ...), array_map(fn ($f) => ..., $request->file('docs')):
-            // the closure's first parameter is one of the uploads.
             foreach ($calls as $call) {
                 $closureArgs = [];
                 $others = [];
@@ -1049,18 +933,14 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
     private function isUploadedFile(Node $expr, array $context): bool
     {
         if ($expr instanceof Variable) {
-            // $_FILES is raw upload data.
             return is_string($expr->name) && ($expr->name === '_FILES' || in_array($expr->name, $context['files'], true));
         }
 
-        // $files[0], $_FILES['f']['tmp_name']
         if ($expr instanceof ArrayDimFetch) {
             return $this->isUploadedFile($expr->var, $context);
         }
 
-        // $request->photo: Laravel's dynamic input property is the uploaded file for a file input. Generic
-        // method names like store()/move() make this risky, so require evidence that "photo" is a file input
-        // in this function, i.e. a hasFile('photo') or file('photo') call.
+        // Dynamic properties are too generic (store()/move()), so require hasFile('x') or file('x') as evidence.
         if (($expr instanceof PropertyFetch || $expr instanceof NullsafePropertyFetch) && $expr->name instanceof Node\Identifier) {
             return in_array($expr->name->toString(), $context['fields'], true)
                 && $this->isRequestLike($expr->var, $context['request']);
@@ -1069,7 +949,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
         return $this->isFileSource($expr, $context['request']);
     }
 
-    /** $request->file('x'), request()->file('x'), Request::file('x'), $request->allFiles() */
     private function isFileSource(Node $expr, array $requestVariables): bool
     {
         if ($expr instanceof StaticCall) {
@@ -1087,7 +966,6 @@ class FileUploadWithoutValidationCheck extends PhpAstCheck
             && $this->isRequestLike($expr->var, $requestVariables);
     }
 
-    /** $request, $this->request, request(): the HTTP request, not e.g. a zip archive or a disk. */
     private function isRequestLike(Node $expr, array $requestVariables): bool
     {
         if ($expr instanceof Variable) {
